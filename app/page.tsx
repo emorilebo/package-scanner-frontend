@@ -131,50 +131,65 @@ export default function Home() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="relative z-10 pt-28 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative z-10 pt-32 pb-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Background gradient overlay */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--cyan-neon)]/5 rounded-full blur-3xl" />
-          <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-[var(--pink-neon)]/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-[var(--green-neon)]/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-[var(--cyan-neon)]/8 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 right-1/4 w-[700px] h-[700px] bg-[var(--pink-neon)]/6 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-[var(--green-neon)]/6 rounded-full blur-3xl" />
         </div>
 
-        <div className="max-w-6xl mx-auto">
-          {/* Title */}
+        <div className="max-w-5xl mx-auto text-center">
+          {/* Badge */}
           <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: -20 }}
+            className="mb-8"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            <span className="inline-block px-5 py-2.5 text-sm font-semibold text-[var(--cyan-neon)] bg-[var(--cyan-neon)]/10 border border-[var(--cyan-neon)]/40 rounded-full backdrop-blur-sm">
+              Rust Dependency Security Platform
+            </span>
+          </motion.div>
+
+          {/* Main Title - Redesigned */}
+          <motion.div
+            className="mb-10"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <motion.div
-              className="inline-block mb-4"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-            >
-              <span className="inline-block px-4 py-2 text-sm font-medium text-[var(--cyan-neon)] bg-[var(--cyan-neon)]/10 border border-[var(--cyan-neon)]/30 rounded-full mb-6">
-                Rust Dependency Security Platform
+            <h1 className="relative inline-block">
+              <span className="block text-7xl sm:text-8xl md:text-9xl font-black leading-none mb-2">
+                <span className="bg-gradient-to-r from-[var(--cyan-neon)] via-[var(--cyan-neon)] to-[var(--pink-neon)] bg-clip-text text-transparent text-glow-cyan">
+                  RUST
+                </span>
               </span>
-            </motion.div>
-            
-            <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold mb-8 leading-[0.95] tracking-tight">
-              <span className="block text-[var(--cyan-neon)] text-glow-cyan mb-1">
-                RUST
+              <span className="block text-7xl sm:text-8xl md:text-9xl font-black leading-none mb-2">
+                <span className="bg-gradient-to-r from-[var(--pink-neon)] via-[var(--pink-neon)] to-[var(--green-neon)] bg-clip-text text-transparent text-glow-pink">
+                  SECURITY
+                </span>
               </span>
-              <span className="block text-[var(--pink-neon)] text-glow-pink mb-1">
-                SECURITY
+              <span className="block text-7xl sm:text-8xl md:text-9xl font-black leading-none">
+                <span className="bg-gradient-to-r from-[var(--green-neon)] via-[var(--green-neon)] to-[var(--cyan-neon)] bg-clip-text text-transparent text-glow-green">
+                  SCANNER
+                </span>
               </span>
-              <span className="block text-[var(--green-neon)] text-glow-green">
-                SCANNER
-              </span>
+              
+              {/* Decorative underline */}
+              <motion.div
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-[var(--cyan-neon)] to-transparent rounded-full"
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 128, opacity: 1 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+              />
             </h1>
             
             <motion.p
-              className="text-xl sm:text-2xl md:text-3xl text-[var(--text-primary)] font-light max-w-3xl mx-auto leading-relaxed mb-6"
+              className="text-2xl sm:text-3xl md:text-4xl text-[var(--text-primary)] font-light max-w-3xl mx-auto leading-relaxed mt-12 mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
             >
               Comprehensive health scoring and security analysis for Rust crates
             </motion.p>
@@ -183,18 +198,18 @@ export default function Home() {
               className="text-base sm:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
             >
               Analyze recency, maintenance status, community engagement, and stability metrics to make informed dependency decisions
             </motion.p>
           </motion.div>
 
-          {/* Search Bar */}
+          {/* Search Bar - More Prominent */}
           <motion.div
-            className="mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-20"
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.6, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
             <SearchTerminal
               onSearch={handleSearch}
@@ -204,7 +219,7 @@ export default function Home() {
 
           {/* Quick Stats */}
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-20"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
@@ -228,7 +243,7 @@ export default function Home() {
           </motion.div>
 
           {/* Features Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto justify-items-center">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -274,7 +289,7 @@ export default function Home() {
               {searchQuery ? 'Search Results' : 'All Rust Crates'}
             </h2>
             {!searchQuery && (
-              <p className="text-[var(--text-secondary)] text-sm sm:text-base">
+              <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl mx-auto">
                 Discover and analyze all Rust crates with health scores
               </p>
             )}
@@ -282,32 +297,32 @@ export default function Home() {
 
           {loading && filteredCrates.length === 0 ? (
             <motion.div
-              className="text-center py-24"
+              className="flex justify-center items-center py-24"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <div className="inline-block p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--text-muted)]/20">
+              <div className="text-center p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--text-muted)]/20">
                 <p className="text-xl text-[var(--text-secondary)]">Loading crates...</p>
               </div>
             </motion.div>
           ) : error ? (
             <motion.div
-              className="text-center py-24"
+              className="flex justify-center items-center py-24"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <div className="inline-block p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--danger)]/30">
+              <div className="text-center p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--danger)]/30">
                 <p className="text-xl text-[var(--danger)] mb-2">Error loading crates</p>
                 <p className="text-sm text-[var(--text-muted)]">{error}</p>
               </div>
             </motion.div>
           ) : filteredCrates.length === 0 ? (
             <motion.div
-              className="text-center py-24"
+              className="flex justify-center items-center py-24"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <div className="inline-block p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--text-muted)]/20 mb-6">
+              <div className="text-center p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--text-muted)]/20">
                 <p className="text-2xl text-[var(--text-secondary)] mb-2">No crates found</p>
                 <p className="text-[var(--text-muted)] text-sm">Try searching for something else</p>
               </div>
@@ -325,11 +340,11 @@ export default function Home() {
                 ))}
               </div>
               {hasMore && (
-                <div className="text-center mt-12">
+                <div className="flex justify-center mt-12">
                   <button
                     onClick={loadMore}
                     disabled={loading}
-                    className="px-6 py-3 cyber-border text-[var(--cyan-neon)] hover:border-[var(--cyan-neon)]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-8 py-3 cyber-border text-[var(--cyan-neon)] hover:border-[var(--cyan-neon)]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? 'Loading...' : 'Load More'}
                   </button>

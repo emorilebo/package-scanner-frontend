@@ -49,10 +49,10 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                 ease: [0.22, 1, 0.36, 1]
             }}
             whileHover={{ y: -4 }}
-            className="cursor-pointer h-full"
+            className="cursor-pointer h-full w-full max-w-full"
             onClick={() => onClick(crate)}
         >
-            <CyberCard className="h-full flex flex-col">
+            <CyberCard className="h-full flex flex-col w-full">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex-1 min-w-0">
