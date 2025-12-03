@@ -2,31 +2,46 @@
 @import "tailwindcss";
 
 :root {
-  /* Cyber Color Palette */
-  --bg-primary: #040D12;
-  --bg-secondary: #0A1828;
-  --bg-tertiary: #0F1C2E;
+  /* Cyber Color Palette - Refined */
+  --bg-primary: #0A0E1A;
+  --bg-secondary: #0F1624;
+  --bg-tertiary: #141B2E;
+  --bg-elevated: #1A2332;
 
-  --text-primary: #E0E7FF;
-  --text-secondary: #94A3B8;
-  --text-muted: #475569;
+  --text-primary: #F0F4FF;
+  --text-secondary: #A8B8D8;
+  --text-muted: #5A6B8A;
+  --text-disabled: #3A4A5A;
 
-  --cyan-neon: #00F3FF;
-  --cyan-glow: rgba(0, 243, 255, 0.5);
-  --pink-neon: #FF00F7;
-  --pink-glow: rgba(255, 0, 247, 0.5);
-  --green-neon: #00FF66;
-  --green-glow: rgba(0, 255, 102, 0.5);
-  --purple-neon: #B620E0;
-  --purple-glow: rgba(182, 32, 224, 0.5);
+  --cyan-neon: #00D9FF;
+  --cyan-glow: rgba(0, 217, 255, 0.4);
+  --cyan-glow-strong: rgba(0, 217, 255, 0.6);
+  --pink-neon: #FF00E5;
+  --pink-glow: rgba(255, 0, 229, 0.4);
+  --pink-glow-strong: rgba(255, 0, 229, 0.6);
+  --green-neon: #00FF88;
+  --green-glow: rgba(0, 255, 136, 0.4);
+  --green-glow-strong: rgba(0, 255, 136, 0.6);
+  --purple-neon: #B84DFF;
+  --purple-glow: rgba(184, 77, 255, 0.4);
+  --purple-glow-strong: rgba(184, 77, 255, 0.6);
 
-  --danger: #FF3366;
-  --warning: #FFB800;
-  --success: #00FF66;
+  --danger: #FF4D6D;
+  --danger-glow: rgba(255, 77, 109, 0.4);
+  --warning: #FFB84D;
+  --warning-glow: rgba(255, 184, 77, 0.4);
+  --success: #00FF88;
+  --success-glow: rgba(0, 255, 136, 0.4);
 
-  /* Grid & Scan Lines */
-  --grid-color: rgba(0, 243, 255, 0.08);
-  --scanline-opacity: 0.05;
+  /* Grid & Scan Lines - More Subtle */
+  --grid-color: rgba(0, 217, 255, 0.04);
+  --scanline-opacity: 0.03;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.6);
 }
 
 @theme inline {
@@ -42,6 +57,10 @@
 
 body {
   background: var(--bg-primary);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(0, 217, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(255, 0, 229, 0.05) 0%, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%);
   color: var(--text-primary);
   font-family: var(--font-sans);
   overflow-x: hidden;
@@ -102,55 +121,68 @@ body::after {
   }
 }
 
-/* Glow Utilities */
+/* Glow Utilities - Refined */
 .glow-cyan {
-  box-shadow: 0 0 20px var(--cyan-glow), 0 0 40px var(--cyan-glow);
+  box-shadow: 0 0 16px var(--cyan-glow), 0 0 32px var(--cyan-glow), 0 0 48px var(--cyan-glow);
 }
 
 .glow-pink {
-  box-shadow: 0 0 20px var(--pink-glow), 0 0 40px var(--pink-glow);
+  box-shadow: 0 0 16px var(--pink-glow), 0 0 32px var(--pink-glow), 0 0 48px var(--pink-glow);
 }
 
 .glow-green {
-  box-shadow: 0 0 20px var(--green-glow), 0 0 40px var(--green-glow);
+  box-shadow: 0 0 16px var(--green-glow), 0 0 32px var(--green-glow), 0 0 48px var(--green-glow);
 }
 
 .glow-purple {
-  box-shadow: 0 0 20px var(--purple-glow), 0 0 40px var(--purple-glow);
+  box-shadow: 0 0 16px var(--purple-glow), 0 0 32px var(--purple-glow), 0 0 48px var(--purple-glow);
 }
 
 .text-glow-cyan {
-  text-shadow: 0 0 10px var(--cyan-glow), 0 0 20px var(--cyan-glow);
+  text-shadow: 0 0 8px var(--cyan-glow), 0 0 16px var(--cyan-glow), 0 0 24px var(--cyan-glow-strong);
 }
 
 .text-glow-pink {
-  text-shadow: 0 0 10px var(--pink-glow), 0 0 20px var(--pink-glow);
+  text-shadow: 0 0 8px var(--pink-glow), 0 0 16px var(--pink-glow), 0 0 24px var(--pink-glow-strong);
 }
 
 .text-glow-green {
-  text-shadow: 0 0 10px var(--green-glow), 0 0 20px var(--green-glow);
+  text-shadow: 0 0 8px var(--green-glow), 0 0 16px var(--green-glow), 0 0 24px var(--green-glow-strong);
 }
 
-/* Cyber Border */
+/* Cyber Border - Enhanced */
 .cyber-border {
   position: relative;
   background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 243, 255, 0.3);
-  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 16px;
   padding: 1.5rem;
   overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 32px rgba(0, 243, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-md), 0 0 0 1px rgba(0, 217, 255, 0.1) inset;
+}
+
+.cyber-border:hover {
+  border-color: rgba(0, 217, 255, 0.4);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 217, 255, 0.2) inset;
+  transform: translateY(-2px);
 }
 
 .cyber-border::before,
 .cyber-border::after {
   content: '';
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border: 2px solid var(--cyan-neon);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.cyber-border:hover::before,
+.cyber-border:hover::after {
+  opacity: 1;
 }
 
 .cyber-border::before {
@@ -158,6 +190,7 @@ body::after {
   left: -2px;
   border-right: none;
   border-bottom: none;
+  border-radius: 4px 0 0 0;
 }
 
 .cyber-border::after {
@@ -165,6 +198,7 @@ body::after {
   right: -2px;
   border-left: none;
   border-top: none;
+  border-radius: 0 0 4px 0;
 }
 
 /* Glitch Effect */

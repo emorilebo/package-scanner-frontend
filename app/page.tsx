@@ -9,83 +9,8 @@ import RankBadge from '@/components/RankBadge';
 import CrateCard, { CrateData } from '@/components/CrateCard';
 import PackageModal from '@/components/PackageModal';
 import Navigation from '@/components/Navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-// Mock data for demonstration
-const mockTopCrates = [
-  {
-    name: 'tokio',
-    score: 95,
-    downloads: '150M',
-    description: 'Asynchronous runtime for Rust',
-    version: '1.35.0',
-    repository: 'https://github.com/tokio-rs/tokio',
-    lastUpdated: '2 days ago',
-    dependencies: 12,
-    securityIssues: { critical: 0, high: 0, medium: 0, low: 0 },
-    features: ['Async I/O', 'Multi-threaded runtime', 'Timer utilities', 'TCP/UDP support']
-  },
-  {
-    name: 'serde',
-    score: 92,
-    downloads: '200M',
-    description: 'Serialization framework',
-    version: '1.0.195',
-    repository: 'https://github.com/serde-rs/serde',
-    lastUpdated: '1 week ago',
-    dependencies: 0,
-    securityIssues: { critical: 0, high: 0, medium: 1, low: 0 },
-    features: ['Derive macros', 'Zero-copy deserialization', 'Data formats', 'Custom serializers']
-  },
-  {
-    name: 'reqwest',
-    score: 88,
-    downloads: '80M',
-    description: 'HTTP client',
-    version: '0.11.23',
-    repository: 'https://github.com/seanmonstar/reqwest',
-    lastUpdated: '3 days ago',
-    dependencies: 24,
-    securityIssues: { critical: 0, high: 1, medium: 2, low: 1 },
-    features: ['Async/blocking clients', 'JSON support', 'Cookie jar', 'Proxy support']
-  },
-  {
-    name: 'actix-web',
-    score: 85,
-    downloads: '45M',
-    description: 'Web framework',
-    version: '4.4.1',
-    repository: 'https://github.com/actix/actix-web',
-    lastUpdated: '1 week ago',
-    dependencies: 18,
-    securityIssues: { critical: 0, high: 0, medium: 3, low: 2 },
-    features: ['Middleware', 'WebSockets', 'HTTP/2', 'Request routing']
-  },
-  {
-    name: 'diesel',
-    score: 82,
-    downloads: '30M',
-    description: 'ORM and query builder',
-    version: '2.1.4',
-    repository: 'https://github.com/diesel-rs/diesel',
-    lastUpdated: '2 weeks ago',
-    dependencies: 15,
-    securityIssues: { critical: 0, high: 1, medium: 4, low: 3 },
-    features: ['Type-safe queries', 'Migration system', 'Connection pooling', 'Multiple backends']
-  },
-  {
-    name: 'clap',
-    score: 90,
-    downloads: '90M',
-    description: 'Command line parser',
-    version: '4.4.12',
-    repository: 'https://github.com/clap-rs/clap',
-    lastUpdated: '5 days ago',
-    dependencies: 8,
-    securityIssues: { critical: 0, high: 0, medium: 1, low: 1 },
-    features: ['Derive API', 'Auto-generated help', 'Subcommands', 'Shell completions']
-  },
-];
 
 const features = [
   {
@@ -117,22 +42,88 @@ const features = [
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPackage, setSelectedPackage] = useState<CrateData | null>(null);
+  const [crates, setCrates] = useState<CrateData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchCrates = async (query: string = '', pageNum: number = 1) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const url = `/api/crates?q=${encodeURIComponent(query)}&page=${pageNum}&per_page=20`;
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch crates');
+      }
+
+      const data = await response.json();
+      const mappedCrates: CrateData[] = data.crates.map((crate: any) => ({
+        name: crate.name,
+        score: crate.score,
+        downloads: crate.downloads,
+        description: crate.description,
+        version: crate.version,
+        repository: crate.repository,
+        lastUpdated: crate.lastUpdated,
+        dependencies: crate.dependencies,
+        securityIssues: crate.securityIssues,
+        features: crate.features,
+        status: crate.status,
+        statusColor: crate.statusColor,
+        statusEmoji: crate.statusEmoji,
+      }));
+
+      if (pageNum === 1) {
+        setCrates(mappedCrates);
+      } else {
+        setCrates(prev => [...prev, ...mappedCrates]);
+      }
+
+      setHasMore(pageNum < data.meta.totalPages);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load crates');
+      console.error('Error fetching crates:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCrates(searchQuery, 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
+
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
 
   const handleSearch = (query: string) => {
-    setSearchQuery(query);
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+    
+    const timer = setTimeout(() => {
+      setSearchQuery(query);
+      setPage(1);
+    }, 500);
+    
+    setDebounceTimer(timer);
   };
 
   const handlePackageClick = (pkg: CrateData) => {
     setSelectedPackage(pkg);
   };
 
-  // Filter crates based on search query
-  const filteredCrates = searchQuery.trim()
-    ? mockTopCrates.filter(crate =>
-      crate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      crate.description.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    : mockTopCrates;
+  const loadMore = () => {
+    if (!loading && hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      fetchCrates(searchQuery, nextPage);
+    }
+  };
+
+  const filteredCrates = crates;
 
   return (
     <div className="relative min-h-screen">
@@ -140,77 +131,129 @@ export default function Home() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="relative z-10 pt-24 pb-32 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="relative z-10 pt-28 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Background gradient overlay */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--cyan-neon)]/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 right-1/4 w-[600px] h-[600px] bg-[var(--pink-neon)]/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-[var(--green-neon)]/5 rounded-full blur-3xl" />
+        </div>
+
+        <div className="max-w-6xl mx-auto">
           {/* Title */}
           <motion.div
             className="text-center mb-12"
-            initial={{ opacity: 0, y: -50 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-6">
-              <GlitchText glitchOnHover className="text-glow-cyan">
+            <motion.div
+              className="inline-block mb-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
+              <span className="inline-block px-4 py-2 text-sm font-medium text-[var(--cyan-neon)] bg-[var(--cyan-neon)]/10 border border-[var(--cyan-neon)]/30 rounded-full mb-6">
+                Rust Dependency Security Platform
+              </span>
+            </motion.div>
+            
+            <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold mb-8 leading-[0.95] tracking-tight">
+              <span className="block text-[var(--cyan-neon)] text-glow-cyan mb-1">
                 RUST
-              </GlitchText>
-              <br />
-              <span className="text-[var(--pink-neon)] text-glow-pink">
+              </span>
+              <span className="block text-[var(--pink-neon)] text-glow-pink mb-1">
                 SECURITY
               </span>
-              <br />
-              <span className="text-[var(--green-neon)] text-glow-green">
+              <span className="block text-[var(--green-neon)] text-glow-green">
                 SCANNER
               </span>
             </h1>
+            
             <motion.p
-              className="text-base sm:text-lg md:text-xl lg:text-2xl text-[var(--text-secondary)] font-mono max-w-3xl mx-auto px-4"
+              className="text-xl sm:text-2xl md:text-3xl text-[var(--text-primary)] font-light max-w-3xl mx-auto leading-relaxed mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
             >
-              Real-time security analysis for Rust crates.
-              <br />
-              Protect your dependencies. Build with confidence.
+              Comprehensive health scoring and security analysis for Rust crates
+            </motion.p>
+            
+            <motion.p
+              className="text-base sm:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              Analyze recency, maintenance status, community engagement, and stability metrics to make informed dependency decisions
             </motion.p>
           </motion.div>
 
           {/* Search Bar */}
           <motion.div
-            className="mb-20"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
+            className="mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <SearchTerminal
               onSearch={handleSearch}
-              placeholder="$ cargo search <crate_name>"
+              placeholder="Search for Rust crates (e.g., tokio, serde, reqwest)..."
             />
           </motion.div>
 
+          {/* Quick Stats */}
+          <motion.div
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-20"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.6 }}
+          >
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[var(--cyan-neon)] mb-1">100K+</div>
+              <div className="text-sm text-[var(--text-secondary)]">Crates Analyzed</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[var(--green-neon)] mb-1">Real-time</div>
+              <div className="text-sm text-[var(--text-secondary)]">Health Scores</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[var(--pink-neon)] mb-1">4 Metrics</div>
+              <div className="text-sm text-[var(--text-secondary)]">Scoring Factors</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-[var(--purple-neon)] mb-1">100%</div>
+              <div className="text-sm text-[var(--text-secondary)]">Open Source</div>
+            </div>
+          </motion.div>
+
           {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 + index * 0.1, duration: 0.5 }}
+                transition={{ delay: 0.6 + index * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               >
                 <CyberCard
                   glowColor={feature.color as any}
                   className="h-full"
                 >
-                  <feature.icon
-                    size={40}
-                    className="mb-4"
-                    style={{ color: `var(--${feature.color}-neon)` }}
-                  />
-                  <h3 className="text-xl font-bold mb-2 text-[var(--text-primary)]">
-                    {feature.title}
-                  </h3>
-                  <p className="text-[var(--text-secondary)] text-sm">
-                    {feature.description}
-                  </p>
+                  <div className="flex flex-col items-start">
+                    <div className="mb-4 p-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--text-muted)]/20">
+                      <feature.icon
+                        size={28}
+                        style={{ color: `var(--${feature.color}-neon)` }}
+                      />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2 text-[var(--text-primary)]">
+                      {feature.title}
+                    </h3>
+                    <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
                 </CyberCard>
               </motion.div>
             ))}
@@ -219,47 +262,90 @@ export default function Home() {
       </section>
 
       {/* Top Ranked Crates */}
-      <section className="relative z-10 pb-32 px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 text-[var(--cyan-neon)] text-glow-cyan"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.6 }}
           >
-            {searchQuery ? 'Search Results' : 'Top Ranked Crates'}
-          </motion.h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-[var(--cyan-neon)] text-glow-cyan">
+              {searchQuery ? 'Search Results' : 'All Rust Crates'}
+            </h2>
+            {!searchQuery && (
+              <p className="text-[var(--text-secondary)] text-sm sm:text-base">
+                Discover and analyze all Rust crates with health scores
+              </p>
+            )}
+          </motion.div>
 
-          {filteredCrates.length === 0 ? (
+          {loading && filteredCrates.length === 0 ? (
             <motion.div
-              className="text-center py-20"
+              className="text-center py-24"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <p className="text-2xl text-[var(--text-secondary)] mb-4">No crates found</p>
-              <p className="text-[var(--text-muted)]">Try searching for something else</p>
+              <div className="inline-block p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--text-muted)]/20">
+                <p className="text-xl text-[var(--text-secondary)]">Loading crates...</p>
+              </div>
+            </motion.div>
+          ) : error ? (
+            <motion.div
+              className="text-center py-24"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <div className="inline-block p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--danger)]/30">
+                <p className="text-xl text-[var(--danger)] mb-2">Error loading crates</p>
+                <p className="text-sm text-[var(--text-muted)]">{error}</p>
+              </div>
+            </motion.div>
+          ) : filteredCrates.length === 0 ? (
+            <motion.div
+              className="text-center py-24"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <div className="inline-block p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--text-muted)]/20 mb-6">
+                <p className="text-2xl text-[var(--text-secondary)] mb-2">No crates found</p>
+                <p className="text-[var(--text-muted)] text-sm">Try searching for something else</p>
+              </div>
             </motion.div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCrates.map((crate, index) => (
-                <CrateCard
-                  key={crate.name}
-                  crate={crate}
-                  onClick={handlePackageClick}
-                  index={index}
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                {filteredCrates.map((crate, index) => (
+                  <CrateCard
+                    key={`${crate.name}-${index}`}
+                    crate={crate}
+                    onClick={handlePackageClick}
+                    index={index}
+                  />
+                ))}
+              </div>
+              {hasMore && (
+                <div className="text-center mt-12">
+                  <button
+                    onClick={loadMore}
+                    disabled={loading}
+                    className="px-6 py-3 cyber-border text-[var(--cyan-neon)] hover:border-[var(--cyan-neon)]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? 'Loading...' : 'Load More'}
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
 
-      {/* Floating Particles */}
+      {/* Floating Particles - More Subtle */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(15)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 rounded-full"
+            className="absolute w-0.5 h-0.5 rounded-full"
             style={{
               background: i % 3 === 0
                 ? 'var(--cyan-neon)'
@@ -268,15 +354,17 @@ export default function Home() {
                   : 'var(--green-neon)',
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
+              opacity: 0.3,
             }}
             animate={{
-              y: [0, -100, 0],
-              opacity: [0, 1, 0],
+              y: [0, -150, 0],
+              opacity: [0, 0.4, 0],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: 4 + Math.random() * 3,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: Math.random() * 3,
+              ease: "easeInOut",
             }}
           />
         ))}
