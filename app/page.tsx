@@ -6,7 +6,7 @@ import SearchTerminal from '@/components/SearchTerminal';
 import CyberCard from '@/components/CyberCard';
 import GlitchText from '@/components/GlitchText';
 import RankBadge from '@/components/RankBadge';
-import CrateCard from '@/components/CrateCard';
+import CrateCard, { CrateData } from '@/components/CrateCard';
 import PackageModal from '@/components/PackageModal';
 import Navigation from '@/components/Navigation';
 import { useState } from 'react';
@@ -116,13 +116,13 @@ const features = [
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPackage, setSelectedPackage] = useState<typeof mockTopCrates[0] | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<CrateData | null>(null);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
-  const handlePackageClick = (pkg: typeof mockTopCrates[0]) => {
+  const handlePackageClick = (pkg: CrateData) => {
     setSelectedPackage(pkg);
   };
 

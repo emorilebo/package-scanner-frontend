@@ -5,7 +5,7 @@ import CyberCard from './CyberCard';
 import RankBadge from './RankBadge';
 import { Download } from 'lucide-react';
 
-interface CrateData {
+export interface CrateData {
     name: string;
     score: number;
     downloads: string;
