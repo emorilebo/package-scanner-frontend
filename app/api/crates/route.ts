@@ -30,6 +30,15 @@ interface CrateVersion {
   updated_at: string;
   downloads: number;
   yanked: boolean;
+  published_by?: CrateAuthor | null;
+}
+
+interface CrateAuthor {
+  id: number;
+  login: string;
+  name: string | null;
+  avatar: string | null;
+  url: string | null;
 }
 
 interface CrateDetailResponse {
@@ -46,7 +55,7 @@ interface CrateDetailResponse {
     updated_at: string;
     categories: string[];
     keywords: string[];
-    authors: string[];
+    authors: CrateAuthor[];
     license: string | null;
   };
   versions: CrateVersion[];
@@ -161,14 +170,27 @@ export async function GET(request: NextRequest) {
           const score = calculateHealthScore(crate, latestVersion);
           const status = getHealthStatus(score);
 
-          // Extract authors - handle both array and object formats
-          let authors: string[] = [];
-          if (detailData.crate.authors && Array.isArray(detailData.crate.authors)) {
-            authors = detailData.crate.authors;
-          } else if (detailData.crate.authors && typeof detailData.crate.authors === 'object') {
-            // If authors is an object, try to extract names
-            authors = Object.values(detailData.crate.authors).filter((author): author is string => typeof author === 'string');
+          // Extract authors from Crates.io API response
+          // Authors are in versions[].published_by, not in crate.authors
+          // Collect unique authors from recent versions (latest 5 versions)
+          const authorMap = new Map<number, string>();
+          const versionsToCheck = detailData.versions.slice(0, 5);
+          
+          for (const version of versionsToCheck) {
+            if (version.published_by) {
+              const author = version.published_by;
+              // Use id as key to avoid duplicates
+              if (!authorMap.has(author.id)) {
+                // Prefer name, fallback to login
+                const authorName = author.name || author.login;
+                if (authorName) {
+                  authorMap.set(author.id, authorName);
+                }
+              }
+            }
           }
+          
+          const authors = Array.from(authorMap.values());
 
           return {
             name: crate.name,

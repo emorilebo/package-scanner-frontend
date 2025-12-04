@@ -314,19 +314,21 @@ export default function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 + index * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="group"
               >
                 <CyberCard
                   glowColor={feature.color as any}
                   className="h-full"
                 >
                   <div className="flex flex-col items-start">
-                    <div className="mb-4 p-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--text-muted)]/20">
+                    <div className="mb-4 p-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--text-muted)]/20 hover:border-[var(--text-muted)]/40 transition-all duration-300 group-hover:shadow-[0_0_15px_var(--cyan-glow)]">
                       <feature.icon
                         size={28}
                         style={{ color: `var(--${feature.color}-neon)` }}
+                        className="transition-transform duration-300 group-hover:scale-110"
                       />
                     </div>
-                    <h3 className="text-lg font-semibold mb-2 text-[var(--text-primary)]">
+                    <h3 className="text-lg font-semibold mb-2 text-[var(--text-primary)] group-hover:text-[var(--cyan-neon)] transition-colors duration-300">
                       {feature.title}
                     </h3>
                     <p className="text-[var(--text-secondary)] text-sm leading-relaxed">

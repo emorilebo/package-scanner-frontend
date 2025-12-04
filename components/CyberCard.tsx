@@ -31,24 +31,32 @@ export default function CyberCard({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             whileHover={hover ? {
-                scale: 1.01,
+                scale: 1.02,
                 transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
             } : undefined}
         >
-            {/* Subtle accent line */}
+            {/* Enhanced accent line with gradient */}
             <div 
-                className="absolute top-0 left-0 w-0.5 h-full opacity-40"
+                className="absolute top-0 left-0 w-0.5 h-full opacity-50 transition-opacity duration-300"
                 style={{
-                    background: `linear-gradient(to bottom, ${glowColorValue}, transparent)`,
-                    transition: 'opacity 0.3s ease'
+                    background: `linear-gradient(to bottom, ${glowColorValue}, transparent 80%)`,
                 }}
             />
             <motion.div 
-                className="absolute top-0 left-0 w-0.5 h-full"
-                style={{ background: glowColorValue }}
-                whileHover={{ opacity: 0.8 }}
+                className="absolute top-0 left-0 w-0.5 h-full transition-opacity duration-300"
+                style={{ 
+                    background: `linear-gradient(to bottom, ${glowColorValue}, transparent)`,
+                }}
+                whileHover={{ opacity: 0.9 }}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: hover ? 0.4 : 0 }}
+                animate={{ opacity: hover ? 0.5 : 0 }}
+            />
+            {/* Subtle corner accent */}
+            <div 
+                className="absolute top-0 right-0 w-8 h-8 opacity-0 hover:opacity-20 transition-opacity duration-300"
+                style={{
+                    background: `radial-gradient(circle at top right, ${glowColorValue}, transparent)`,
+                }}
             />
             <div className="relative z-10">
                 {children}

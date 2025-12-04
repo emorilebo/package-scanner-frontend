@@ -55,12 +55,14 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
             onClick={() => onClick(crate)}
         >
             <CyberCard className="h-full flex flex-col w-full overflow-hidden relative group">
-                {/* Scanner Overlay */}
+                {/* Enhanced Scanner Overlay */}
                 <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div className="scanner-line"></div>
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--cyan-neon)]/5 to-transparent translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-1000 ease-in-out"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--cyan-neon)]/8 to-transparent translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-1000 ease-in-out"></div>
                     {/* Security grid overlay on hover */}
                     <div className="absolute inset-0 security-grid opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    {/* Subtle pulse effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--cyan-neon)]/5 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-pulse"></div>
                 </div>
 
                 {/* Header */}
@@ -137,19 +139,21 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                 {/* Progress Bar */}
                 <div className="mt-auto relative z-10">
                     <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-xs text-[var(--text-muted)]">Security Score</span>
-                        <span className="text-xs font-mono text-[var(--text-secondary)]">{crate.score}%</span>
+                        <span className="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors duration-300">Security Score</span>
+                        <span className="text-xs font-mono text-[var(--text-secondary)] group-hover:text-[var(--cyan-neon)] transition-colors duration-300">{crate.score}%</span>
                     </div>
-                    <div className="h-1.5 bg-[var(--bg-elevated)] rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-[var(--bg-elevated)] rounded-full overflow-hidden group-hover:bg-[var(--bg-tertiary)] transition-colors duration-300">
                         <motion.div
-                            className="h-full bg-gradient-to-r from-[var(--cyan-neon)] via-[var(--green-neon)] to-[var(--green-neon)]"
+                            className="h-full bg-gradient-to-r from-[var(--cyan-neon)] via-[var(--green-neon)] to-[var(--green-neon)] relative"
                             initial={{ width: 0 }}
                             animate={{ width: `${crate.score}%` }}
                             transition={{ delay: 0.3 + index * 0.05, duration: 1, ease: "easeOut" }}
                             style={{
                                 boxShadow: `0 0 8px var(--green-glow)`
                             }}
-                        />
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+                        </motion.div>
                     </div>
                 </div>
             </CyberCard>
