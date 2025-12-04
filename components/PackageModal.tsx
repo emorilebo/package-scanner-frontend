@@ -124,7 +124,7 @@ export default function PackageModal({ packageData, onClose }: PackageModalProps
                                 </div>
                             )}
                         </div>
-                        <div className="sm:ml-4 md:ml-6 flex-shrink-0 self-start sm:self-center">
+                        <div className="sm:ml-4 md:ml-6 flex-shrink-0 self-start sm:self-center flex flex-col items-center gap-3">
                             <div className="sm:hidden">
                                 <RankBadge score={packageData.score} size="sm" />
                             </div>
@@ -134,6 +134,14 @@ export default function PackageModal({ packageData, onClose }: PackageModalProps
                             <div className="hidden md:block">
                                 <RankBadge score={packageData.score} size="lg" />
                             </div>
+
+                            <a
+                                href={`/graph/${encodeURIComponent(packageData.name)}`}
+                                className="px-3 py-1.5 rounded-md bg-[var(--cyan-neon)]/10 border border-[var(--cyan-neon)]/40 text-[var(--cyan-neon)] text-xs font-mono hover:bg-[var(--cyan-neon)]/20 hover:border-[var(--cyan-neon)] transition-all flex items-center gap-2"
+                            >
+                                <GitBranch size={14} />
+                                <span>VIEW GRAPH</span>
+                            </a>
                         </div>
                     </div>
 

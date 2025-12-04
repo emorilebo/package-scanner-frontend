@@ -134,6 +134,16 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                         <span className="text-[var(--text-muted)] hidden sm:inline">•</span>
                         <span>{crate.dependencies} deps</span>
                     </div>
+                    <div
+                        className="ml-auto flex items-center gap-1.5 text-[var(--cyan-neon)] hover:text-glow-cyan transition-all"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            window.location.href = `/graph/${encodeURIComponent(crate.name)}`;
+                        }}
+                    >
+                        <span className="text-[var(--text-muted)] hidden sm:inline">•</span>
+                        <span className="font-mono font-bold">VIEW GRAPH</span>
+                    </div>
                 </div>
 
                 {/* Progress Bar */}
