@@ -15,19 +15,21 @@ export default function Navigation() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                <div className="flex items-center justify-between h-16">
+            <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 w-full">
+                <div className="flex items-center justify-between h-14 sm:h-16">
                     {/* Logo */}
                     <motion.a
                         href="/"
-                        className="flex items-center gap-3 group"
+                        className="flex items-center gap-2 sm:gap-3 group"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        <div className="relative">
-                            <Shield className="text-[var(--cyan-neon)] transition-all group-hover:text-glow-cyan" size={28} />
-                        </div>
-                        <GlitchText className="text-lg sm:text-xl font-bold font-mono text-[var(--cyan-neon)]">
+                        <Shield 
+                            className="text-[var(--cyan-neon)] transition-all group-hover:text-glow-cyan flex-shrink-0" 
+                            size={24} 
+                            strokeWidth={2.5}
+                        />
+                        <GlitchText className="text-sm sm:text-base md:text-lg lg:text-xl font-bold font-mono text-[var(--cyan-neon)]">
                             RUST_AUDIT
                         </GlitchText>
                     </motion.a>
@@ -35,20 +37,8 @@ export default function Navigation() {
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center gap-1">
                         <a
-                            href="#"
-                            className="px-4 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] transition-colors rounded-lg hover:bg-[var(--bg-secondary)]"
-                        >
-                            Rankings
-                        </a>
-                        <a
-                            href="#"
-                            className="px-4 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] transition-colors rounded-lg hover:bg-[var(--bg-secondary)]"
-                        >
-                            Search
-                        </a>
-                        <a
                             href="/about"
-                            className="px-4 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] transition-colors rounded-lg hover:bg-[var(--bg-secondary)]"
+                            className="px-3 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] transition-colors rounded-lg hover:bg-[var(--bg-secondary)]"
                         >
                             About
                         </a>
@@ -56,10 +46,10 @@ export default function Navigation() {
                             href="https://github.com/emorilebo/rust_secure_dependency_audit"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="ml-2 flex items-center gap-2 px-4 py-2 text-sm border border-[var(--cyan-neon)]/30 rounded-lg text-[var(--cyan-neon)] hover:bg-[var(--cyan-neon)]/10 hover:border-[var(--cyan-neon)]/50 transition-all"
+                            className="ml-1 flex items-center gap-2 px-3 py-2 text-sm border border-[var(--cyan-neon)]/30 rounded-lg text-[var(--cyan-neon)] hover:bg-[var(--cyan-neon)]/10 hover:border-[var(--cyan-neon)]/50 transition-all"
                         >
                             <Github size={18} />
-                            <span>GitHub</span>
+                            <span className="hidden lg:inline">GitHub</span>
                         </a>
                     </div>
 
@@ -80,20 +70,6 @@ export default function Navigation() {
                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 >
                     <div className="pb-4 pt-2 space-y-1">
-                        <a
-                            href="#"
-                            className="block px-4 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] hover:bg-[var(--bg-secondary)] transition-colors rounded-lg"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Rankings
-                        </a>
-                        <a
-                            href="#"
-                            className="block px-4 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] hover:bg-[var(--bg-secondary)] transition-colors rounded-lg"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Search
-                        </a>
                         <a
                             href="/about"
                             className="block px-4 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] hover:bg-[var(--bg-secondary)] transition-colors rounded-lg"

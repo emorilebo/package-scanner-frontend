@@ -41,6 +41,8 @@ const features = [
   }
 ];
 
+type ScoreFilter = 'all' | 'healthy' | 'warning' | 'stale' | 'risky';
+
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPackage, setSelectedPackage] = useState<CrateData | null>(null);
@@ -49,6 +51,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [scoreFilter, setScoreFilter] = useState<ScoreFilter>('all');
 
   const fetchCrates = async (query: string = '', pageNum: number = 1) => {
     try {
@@ -76,6 +79,8 @@ export default function Home() {
         status: crate.status,
         statusColor: crate.statusColor,
         statusEmoji: crate.statusEmoji,
+        authors: crate.authors || [],
+        license: crate.license || 'Unknown',
       }));
 
       if (pageNum === 1) {
@@ -150,15 +155,26 @@ export default function Home() {
     };
   }, [loadMore]);
 
-  const filteredCrates = crates;
+  // Filter crates by score
+  const getScoreCategory = (score: number): ScoreFilter => {
+    if (score >= 80) return 'healthy';
+    if (score >= 60) return 'warning';
+    if (score >= 40) return 'stale';
+    return 'risky';
+  };
+
+  const filteredCrates = crates.filter(crate => {
+    if (scoreFilter === 'all') return true;
+    return getScoreCategory(crate.score) === scoreFilter;
+  });
 
   return (
     <main className="relative min-h-screen w-full">
       {/* Navigation */}
       <Navigation />
 
-      {/* Hero Section - Proper spacing for fixed navbar (h-16 = 64px) + extra padding */}
-      <section className="relative z-10 pb-28 overflow-hidden" style={{ paddingTop: 'calc(4rem + 80px)' }}>
+      {/* Hero Section - Proper spacing for fixed navbar (h-14 sm:h-16) + extra padding */}
+      <section className="relative z-10 pb-16 sm:pb-28 overflow-hidden" style={{ paddingTop: 'calc(3.5rem + 60px)' }}>
         {/* Background gradient overlay */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-[var(--cyan-neon)]/8 rounded-full blur-3xl" />
@@ -186,8 +202,8 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="relative px-4 sm:px-6 md:px-8 py-4 w-full">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-center">
+            <div className="relative px-2 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-4 w-full">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-center">
                 <motion.span
                   className="inline-block bg-gradient-to-r from-[var(--cyan-neon)] via-[var(--pink-neon)] to-[var(--green-neon)] bg-clip-text text-transparent"
                   animate={{
@@ -224,7 +240,7 @@ export default function Home() {
             </div>
 
             <motion.p
-              className="text-lg sm:text-xl md:text-2xl text-[var(--text-primary)] font-light max-w-3xl leading-relaxed mt-8 mb-4 text-center px-4 mx-auto"
+              className="text-base sm:text-lg md:text-xl lg:text-2xl text-[var(--text-primary)] font-light max-w-3xl leading-relaxed mt-4 sm:mt-6 md:mt-8 mb-3 sm:mb-4 text-center px-2 sm:px-4 mx-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.8 }}
@@ -233,7 +249,7 @@ export default function Home() {
             </motion.p>
 
             <motion.p
-              className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl leading-relaxed text-center px-4 mx-auto"
+              className="text-xs sm:text-sm md:text-base text-[var(--text-secondary)] max-w-2xl leading-relaxed text-center px-2 sm:px-4 mx-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
@@ -244,7 +260,7 @@ export default function Home() {
 
           {/* Search Bar - More Prominent */}
           <motion.div
-            className="w-full max-w-3xl mb-16 mt-8"
+            className="w-full max-w-3xl mb-8 sm:mb-12 md:mb-16 mt-4 sm:mt-6 md:mt-8 px-2 sm:px-4"
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.6, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -267,31 +283,31 @@ export default function Home() {
 
           {/* Quick Stats */}
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-20 mt-8 w-full px-4"
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-4xl mx-auto mb-12 sm:mb-16 md:mb-20 mt-4 sm:mt-6 md:mt-8 w-full px-2 sm:px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
           >
             <div className="text-center">
-              <div className="text-3xl font-bold text-[var(--cyan-neon)] mb-1">100K+</div>
-              <div className="text-sm text-[var(--text-secondary)]">Crates Analyzed</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-[var(--cyan-neon)] mb-1">100K+</div>
+              <div className="text-xs sm:text-sm text-[var(--text-secondary)]">Crates Analyzed</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-[var(--green-neon)] mb-1">Real-time</div>
-              <div className="text-sm text-[var(--text-secondary)]">Health Scores</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-[var(--green-neon)] mb-1">Real-time</div>
+              <div className="text-xs sm:text-sm text-[var(--text-secondary)]">Health Scores</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-[var(--pink-neon)] mb-1">4 Metrics</div>
-              <div className="text-sm text-[var(--text-secondary)]">Scoring Factors</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-[var(--pink-neon)] mb-1">4 Metrics</div>
+              <div className="text-xs sm:text-sm text-[var(--text-secondary)]">Scoring Factors</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-[var(--purple-neon)] mb-1">100%</div>
-              <div className="text-sm text-[var(--text-secondary)]">Open Source</div>
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-[var(--purple-neon)] mb-1">100%</div>
+              <div className="text-xs sm:text-sm text-[var(--text-secondary)]">Open Source</div>
             </div>
           </motion.div>
 
           {/* Features Grid */}
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 px-4">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mt-4 sm:mt-6 md:mt-8 px-2 sm:px-4">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -325,22 +341,85 @@ export default function Home() {
       </section>
 
       {/* Top Ranked Crates */}
-      <section className="relative z-10 py-16 w-full">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+      <section className="relative z-10 py-8 sm:py-12 md:py-16 w-full">
+        <div className="container mx-auto max-w-7xl px-2 sm:px-4 md:px-6 lg:px-8 w-full">
           <motion.div
-            className="text-center mb-12"
+            className="text-center mb-6 sm:mb-8 md:mb-12"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0, duration: 0.6 }}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-[var(--cyan-neon)] text-glow-cyan">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-[var(--cyan-neon)] text-glow-cyan px-2">
               {searchQuery ? 'Search Results' : 'All Rust Crates'}
             </h2>
             {!searchQuery && (
-              <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl mx-auto">
+              <p className="text-[var(--text-secondary)] text-xs sm:text-sm md:text-base max-w-2xl mx-auto px-2 mb-4 sm:mb-6">
                 Discover and analyze all Rust crates with health scores
               </p>
             )}
+          </motion.div>
+
+          {/* Score Filter Buttons */}
+          <motion.div
+            className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 px-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+          >
+            <button
+              onClick={() => setScoreFilter('all')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+                scoreFilter === 'all'
+                  ? 'bg-[var(--cyan-neon)]/20 border-2 border-[var(--cyan-neon)] text-[var(--cyan-neon)] shadow-[0_0_15px_var(--cyan-glow)]'
+                  : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--cyan-neon)]/50 hover:text-[var(--cyan-neon)]'
+              }`}
+            >
+              All
+            </button>
+            <button
+              onClick={() => setScoreFilter('healthy')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${
+                scoreFilter === 'healthy'
+                  ? 'bg-[var(--green-neon)]/20 border-2 border-[var(--green-neon)] text-[var(--green-neon)] shadow-[0_0_15px_var(--green-glow)]'
+                  : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--green-neon)]/50 hover:text-[var(--green-neon)]'
+              }`}
+            >
+              <span>🟢</span>
+              <span>Healthy (80-100)</span>
+            </button>
+            <button
+              onClick={() => setScoreFilter('warning')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${
+                scoreFilter === 'warning'
+                  ? 'bg-[var(--warning)]/20 border-2 border-[var(--warning)] text-[var(--warning)] shadow-[0_0_15px_var(--warning-glow)]'
+                  : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--warning)]/50 hover:text-[var(--warning)]'
+              }`}
+            >
+              <span>🟡</span>
+              <span>Warning (60-79)</span>
+            </button>
+            <button
+              onClick={() => setScoreFilter('stale')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${
+                scoreFilter === 'stale'
+                  ? 'bg-[var(--warning)]/20 border-2 border-[var(--warning)] text-[var(--warning)] shadow-[0_0_15px_var(--warning-glow)]'
+                  : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--warning)]/50 hover:text-[var(--warning)]'
+              }`}
+            >
+              <span>🟠</span>
+              <span>Stale (40-59)</span>
+            </button>
+            <button
+              onClick={() => setScoreFilter('risky')}
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${
+                scoreFilter === 'risky'
+                  ? 'bg-[var(--danger)]/20 border-2 border-[var(--danger)] text-[var(--danger)] shadow-[0_0_15px_var(--danger-glow)]'
+                  : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--danger)]/50 hover:text-[var(--danger)]'
+              }`}
+            >
+              <span>🔴</span>
+              <span>Risky (0-39)</span>
+            </button>
           </motion.div>
 
           {loading && filteredCrates.length === 0 ? (
@@ -366,18 +445,22 @@ export default function Home() {
             </motion.div>
           ) : filteredCrates.length === 0 ? (
             <motion.div
-              className="flex justify-center items-center py-24"
+              className="flex justify-center items-center py-12 sm:py-16 md:py-24"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <div className="text-center p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--text-muted)]/20">
-                <p className="text-2xl text-[var(--text-secondary)] mb-2">No crates found</p>
-                <p className="text-[var(--text-muted)] text-sm">Try searching for something else</p>
+              <div className="text-center p-4 sm:p-6 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--text-muted)]/20 max-w-md mx-auto">
+                <p className="text-lg sm:text-xl md:text-2xl text-[var(--text-secondary)] mb-2">
+                  {scoreFilter !== 'all' ? `No ${scoreFilter} crates found` : 'No crates found'}
+                </p>
+                <p className="text-[var(--text-muted)] text-xs sm:text-sm">
+                  {scoreFilter !== 'all' ? 'Try a different filter or search for something else' : 'Try searching for something else'}
+                </p>
               </div>
             </motion.div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 w-full mt-4 sm:mt-6 md:mt-8">
                 {filteredCrates.map((crate, index) => (
                   <CrateCard
                     key={`${crate.name}-${index}`}

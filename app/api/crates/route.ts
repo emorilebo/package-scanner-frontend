@@ -161,6 +161,15 @@ export async function GET(request: NextRequest) {
           const score = calculateHealthScore(crate, latestVersion);
           const status = getHealthStatus(score);
 
+          // Extract authors - handle both array and object formats
+          let authors: string[] = [];
+          if (detailData.crate.authors && Array.isArray(detailData.crate.authors)) {
+            authors = detailData.crate.authors;
+          } else if (detailData.crate.authors && typeof detailData.crate.authors === 'object') {
+            // If authors is an object, try to extract names
+            authors = Object.values(detailData.crate.authors).filter((author): author is string => typeof author === 'string');
+          }
+
           return {
             name: crate.name,
             version: crate.max_version,
@@ -182,7 +191,7 @@ export async function GET(request: NextRequest) {
             },
             features: [],
             versionCount: detailData.versions.length,
-            authors: detailData.crate.authors || [],
+            authors: authors.length > 0 ? authors : ['Unknown Author'],
             license: detailData.crate.license || 'Unknown',
             createdAt: crate.created_at,
             updatedAt: latestVersion?.updated_at || crate.updated_at,
@@ -213,7 +222,7 @@ export async function GET(request: NextRequest) {
             },
             features: [],
             versionCount: 0,
-            authors: [],
+            authors: ['Unknown Author'],
             license: 'Unknown',
             createdAt: crate.created_at,
             updatedAt: crate.updated_at,

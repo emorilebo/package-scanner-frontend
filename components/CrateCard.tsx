@@ -64,14 +64,14 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                 </div>
 
                 {/* Header */}
-                <div className="flex items-start justify-between mb-4 relative z-10">
+                <div className="flex items-start justify-between mb-4 relative z-10 gap-3">
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-xl font-bold font-mono text-[var(--cyan-neon)] group-hover:text-glow-cyan transition-all truncate">
+                            <h3 className="text-lg sm:text-xl font-bold font-mono text-[var(--cyan-neon)] group-hover:text-glow-cyan transition-all truncate">
                                 {crate.name}
                             </h3>
                         </div>
-                        <div className="flex items-center gap-2 mb-3 flex-wrap">
+                        <div className="flex items-center gap-1.5 sm:gap-2 mb-3 flex-wrap">
                             <span className="text-xs px-2.5 py-1 bg-[var(--bg-elevated)] border border-[var(--cyan-neon)]/30 rounded-md text-[var(--cyan-neon)] font-mono">
                                 v{crate.version}
                             </span>
@@ -92,41 +92,44 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                                 </span>
                             )}
                         </div>
-                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-2 mb-3">
+                        <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-2 mb-3">
                             {crate.description}
                         </p>
 
                         {/* Author & License */}
-                        <div className="flex items-center gap-4 text-xs text-[var(--text-muted)] mb-2">
-                            <div className="flex items-center gap-1.5">
-                                <User size={12} className="text-[var(--pink-neon)]" />
-                                <span className="truncate max-w-[120px] text-[var(--text-secondary)]">
-                                    {crate.authors && crate.authors.length > 0 ? crate.authors[0] : 'Unknown Author'}
-                                </span>
-                            </div>
+                        <div className="flex items-center gap-2 sm:gap-4 text-xs text-[var(--text-muted)] mb-2 flex-wrap">
+                            {crate.authors && crate.authors.length > 0 && (
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                    <User size={12} className="text-[var(--pink-neon)] flex-shrink-0" />
+                                    <span className="truncate max-w-[120px] sm:max-w-[200px] text-[var(--text-secondary)]" title={crate.authors.join(', ')}>
+                                        {crate.authors[0]}
+                                        {crate.authors.length > 1 && ` +${crate.authors.length - 1}`}
+                                    </span>
+                                </div>
+                            )}
                             {crate.license && (
-                                <div className="flex items-center gap-1.5">
-                                    <Scale size={12} className="text-[var(--purple-neon)]" />
-                                    <span className="truncate max-w-[80px] text-[var(--text-secondary)]">
+                                <div className="flex items-center gap-1.5 min-w-0">
+                                    <Scale size={12} className="text-[var(--purple-neon)] flex-shrink-0" />
+                                    <span className="truncate max-w-[80px] sm:max-w-[120px] text-[var(--text-secondary)]" title={crate.license}>
                                         {crate.license}
                                     </span>
                                 </div>
                             )}
                         </div>
                     </div>
-                    <div className="ml-3 flex-shrink-0">
+                    <div className="ml-2 sm:ml-3 flex-shrink-0">
                         <RankBadge score={crate.score} size="sm" />
                     </div>
                 </div>
 
                 {/* Stats */}
-                <div className="flex items-center gap-4 mb-4 text-xs relative z-10">
+                <div className="flex items-center gap-2 sm:gap-4 mb-4 text-xs relative z-10 flex-wrap">
                     <div className="flex items-center gap-1.5 text-[var(--text-secondary)]">
-                        <Download size={14} className="text-[var(--green-neon)]" />
-                        <span>{crate.downloads}</span>
+                        <Download size={14} className="text-[var(--green-neon)] flex-shrink-0" />
+                        <span className="truncate">{crate.downloads}</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-[var(--text-secondary)]">
-                        <span className="text-[var(--text-muted)]">•</span>
+                        <span className="text-[var(--text-muted)] hidden sm:inline">•</span>
                         <span>{crate.dependencies} deps</span>
                     </div>
                 </div>

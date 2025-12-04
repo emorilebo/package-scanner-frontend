@@ -70,12 +70,12 @@ export default function SearchTerminal({
 
                 {/* Main search container - Enhanced */}
                 <div
-                    className={`relative flex items-center gap-5 px-8 py-8 bg-[var(--bg-primary)] rounded-3xl transition-all duration-300 border-2 border-transparent ${isFocused ? 'scale-[1.03] shadow-[0_0_40px_var(--cyan-glow),0_0_80px_var(--pink-glow)]' : 'shadow-[0_0_20px_var(--cyan-glow)]'
+                    className={`relative flex items-center gap-2 sm:gap-3 md:gap-5 px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8 bg-[var(--bg-primary)] rounded-2xl sm:rounded-3xl transition-all duration-300 border-2 border-transparent ${isFocused ? 'scale-[1.02] sm:scale-[1.03] shadow-[0_0_30px_var(--cyan-glow),0_0_60px_var(--pink-glow)]' : 'shadow-[0_0_15px_var(--cyan-glow)] sm:shadow-[0_0_20px_var(--cyan-glow)]'
                         }`}
                 >
                     {/* Enhanced animated search icon */}
                     <motion.div
-                        className="flex-shrink-0 p-4 rounded-2xl bg-gradient-to-br from-[var(--cyan-neon)]/30 to-[var(--pink-neon)]/30 text-[var(--cyan-neon)] shadow-[0_0_15px_var(--cyan-glow)]"
+                        className="flex-shrink-0 p-2 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[var(--cyan-neon)]/30 to-[var(--pink-neon)]/30 text-[var(--cyan-neon)] shadow-[0_0_10px_var(--cyan-glow)] sm:shadow-[0_0_15px_var(--cyan-glow)]"
                         animate={isFocused ? {
                             scale: [1, 1.15, 1],
                             rotate: [0, 5, -5, 0],
@@ -88,7 +88,9 @@ export default function SearchTerminal({
                             ease: "easeInOut"
                         }}
                     >
-                        <Search size={32} strokeWidth={2.5} />
+                        <Search size={20} className="sm:hidden" strokeWidth={2.5} />
+                        <Search size={24} className="hidden sm:block md:hidden" strokeWidth={2.5} />
+                        <Search size={32} className="hidden md:block" strokeWidth={2.5} />
                     </motion.div>
 
                     <input
@@ -101,7 +103,7 @@ export default function SearchTerminal({
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         placeholder={placeholder}
-                        className="flex-1 bg-transparent border-none outline-none text-[var(--text-primary)] text-xl md:text-2xl placeholder:text-[var(--text-muted)] placeholder:font-normal font-semibold"
+                        className="flex-1 bg-transparent border-none outline-none text-[var(--text-primary)] text-sm sm:text-base md:text-xl lg:text-2xl placeholder:text-[var(--text-muted)] placeholder:font-normal font-semibold"
                     />
 
                     <AnimatePresence>
@@ -142,12 +144,12 @@ export default function SearchTerminal({
 
             {/* Helper text */}
             <motion.p
-                className="text-center mt-6 text-sm text-[var(--text-muted)]"
+                className="text-center mt-4 sm:mt-6 text-xs sm:text-sm text-[var(--text-muted)] px-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
             >
-                Press <kbd className="px-2.5 py-1.5 bg-[var(--bg-tertiary)] border border-[var(--cyan-neon)]/30 rounded-md text-xs font-mono text-[var(--cyan-neon)]">Enter</kbd> to search or start typing to filter results
+                Press <kbd className="px-1.5 sm:px-2.5 py-1 sm:py-1.5 bg-[var(--bg-tertiary)] border border-[var(--cyan-neon)]/30 rounded-md text-[10px] sm:text-xs font-mono text-[var(--cyan-neon)]">Enter</kbd> to search or start typing to filter results
             </motion.p>
         </motion.form>
     );
