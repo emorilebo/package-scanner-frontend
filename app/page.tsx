@@ -54,7 +54,7 @@ export default function Home() {
       setError(null);
       const url = `/api/crates?q=${encodeURIComponent(query)}&page=${pageNum}&per_page=20`;
       const response = await fetch(url);
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch crates');
       }
@@ -102,12 +102,12 @@ export default function Home() {
     if (debounceTimer) {
       clearTimeout(debounceTimer);
     }
-    
+
     const timer = setTimeout(() => {
       setSearchQuery(query);
       setPage(1);
     }, 500);
-    
+
     setDebounceTimer(timer);
   };
 
@@ -139,7 +139,7 @@ export default function Home() {
           <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-[var(--green-neon)]/6 rounded-full blur-3xl" />
         </div>
 
-        <div className="max-w-5xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div
             className="mb-8"
@@ -160,22 +160,22 @@ export default function Home() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1 className="relative inline-block">
-              <span className="block text-7xl sm:text-8xl md:text-9xl font-black leading-none mb-2">
+              <span className="block text-5xl sm:text-6xl md:text-7xl font-black leading-tight mb-2">
                 <span className="bg-gradient-to-r from-[var(--cyan-neon)] via-[var(--cyan-neon)] to-[var(--pink-neon)] bg-clip-text text-transparent text-glow-cyan">
                   RUST
                 </span>
               </span>
-              <span className="block text-7xl sm:text-8xl md:text-9xl font-black leading-none mb-2">
+              <span className="block text-5xl sm:text-6xl md:text-7xl font-black leading-tight mb-2">
                 <span className="bg-gradient-to-r from-[var(--pink-neon)] via-[var(--pink-neon)] to-[var(--green-neon)] bg-clip-text text-transparent text-glow-pink">
                   SECURITY
                 </span>
               </span>
-              <span className="block text-7xl sm:text-8xl md:text-9xl font-black leading-none">
+              <span className="block text-5xl sm:text-6xl md:text-7xl font-black leading-tight">
                 <span className="bg-gradient-to-r from-[var(--green-neon)] via-[var(--green-neon)] to-[var(--cyan-neon)] bg-clip-text text-transparent text-glow-green">
                   SCANNER
                 </span>
               </span>
-              
+
               {/* Decorative underline */}
               <motion.div
                 className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-[var(--cyan-neon)] to-transparent rounded-full"
@@ -184,7 +184,7 @@ export default function Home() {
                 transition={{ delay: 0.8, duration: 0.6 }}
               />
             </h1>
-            
+
             <motion.p
               className="text-2xl sm:text-3xl md:text-4xl text-[var(--text-primary)] font-light max-w-3xl mx-auto leading-relaxed mt-12 mb-6"
               initial={{ opacity: 0 }}
@@ -193,7 +193,7 @@ export default function Home() {
             >
               Comprehensive health scoring and security analysis for Rust crates
             </motion.p>
-            
+
             <motion.p
               className="text-base sm:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}

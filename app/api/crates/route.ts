@@ -46,7 +46,9 @@ interface CrateDetailResponse {
     updated_at: string;
     categories: string[];
     keywords: string[];
+    keywords: string[];
     authors: string[];
+    license: string | null;
   };
   versions: CrateVersion[];
 }
@@ -182,6 +184,7 @@ export async function GET(request: NextRequest) {
             features: [],
             versionCount: detailData.versions.length,
             authors: detailData.crate.authors || [],
+            license: detailData.crate.license || 'Unknown',
             createdAt: crate.created_at,
             updatedAt: latestVersion?.updated_at || crate.updated_at,
           };
@@ -211,7 +214,9 @@ export async function GET(request: NextRequest) {
             },
             features: [],
             versionCount: 0,
+            versionCount: 0,
             authors: [],
+            license: 'Unknown',
             createdAt: crate.created_at,
             updatedAt: crate.updated_at,
           };

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import CyberCard from './CyberCard';
 import RankBadge from './RankBadge';
-import { Download } from 'lucide-react';
+import { Download, User, Scale } from 'lucide-react';
 
 export interface CrateData {
     name: string;
@@ -24,6 +24,8 @@ export interface CrateData {
     status?: string;
     statusColor?: string;
     statusEmoji?: string;
+    authors?: string[];
+    license?: string;
 }
 
 interface CrateCardProps {
@@ -33,31 +35,37 @@ interface CrateCardProps {
 }
 
 export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps) {
-    const totalIssues = 
-        crate.securityIssues.critical + 
-        crate.securityIssues.high + 
-        crate.securityIssues.medium + 
+    const totalIssues =
+        crate.securityIssues.critical +
+        crate.securityIssues.high +
+        crate.securityIssues.medium +
         crate.securityIssues.low;
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ 
+            transition={{
                 delay: index * 0.05,
                 duration: 0.5,
                 ease: [0.22, 1, 0.36, 1]
             }}
             whileHover={{ y: -4 }}
-            className="cursor-pointer h-full w-full max-w-full"
+            className="cursor-pointer h-full w-full max-w-full group"
             onClick={() => onClick(crate)}
         >
-            <CyberCard className="h-full flex flex-col w-full">
+            <CyberCard className="h-full flex flex-col w-full overflow-hidden relative">
+                {/* Scanner Overlay */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="scanner-line"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--cyan-neon)]/5 to-transparent translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-1000 ease-in-out"></div>
+                </div>
+
                 {/* Header */}
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start justify-between mb-4 relative z-10">
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-xl font-bold font-mono text-[var(--cyan-neon)] hover:text-glow-cyan transition-all truncate">
+                            <h3 className="text-xl font-bold font-mono text-[var(--cyan-neon)] group-hover:text-glow-cyan transition-all truncate">
                                 {crate.name}
                             </h3>
                         </div>
@@ -66,13 +74,12 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                                 v{crate.version}
                             </span>
                             {crate.status && crate.statusEmoji && (
-                                <span 
-                                    className={`text-xs px-2.5 py-1 rounded-md font-medium ${
-                                        crate.statusColor === 'green' ? 'bg-[var(--green-neon)]/20 border border-[var(--green-neon)]/40 text-[var(--green-neon)]' :
-                                        crate.statusColor === 'yellow' ? 'bg-[var(--warning)]/20 border border-[var(--warning)]/40 text-[var(--warning)]' :
-                                        crate.statusColor === 'orange' ? 'bg-[var(--warning)]/20 border border-[var(--warning)]/40 text-[var(--warning)]' :
-                                        'bg-[var(--danger)]/20 border border-[var(--danger)]/40 text-[var(--danger)]'
-                                    }`}
+                                <span
+                                    className={`text-xs px-2.5 py-1 rounded-md font-medium ${crate.statusColor === 'green' ? 'bg-[var(--green-neon)]/20 border border-[var(--green-neon)]/40 text-[var(--green-neon)]' :
+                                            crate.statusColor === 'yellow' ? 'bg-[var(--warning)]/20 border border-[var(--warning)]/40 text-[var(--warning)]' :
+                                                crate.statusColor === 'orange' ? 'bg-[var(--warning)]/20 border border-[var(--warning)]/40 text-[var(--warning)]' :
+                                                    'bg-[var(--danger)]/20 border border-[var(--danger)]/40 text-[var(--danger)]'
+                                        }`}
                                 >
                                     {crate.statusEmoji} {crate.status}
                                 </span>
@@ -83,9 +90,27 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                                 </span>
                             )}
                         </div>
-                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-2">
+                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-2 mb-3">
                             {crate.description}
                         </p>
+
+                        {/* Author & License */}
+                        <div className="flex items-center gap-4 text-xs text-[var(--text-muted)] mb-2">
+                            <div className="flex items-center gap-1.5">
+                                <User size={12} className="text-[var(--pink-neon)]" />
+                                <span className="truncate max-w-[120px] text-[var(--text-secondary)]">
+                                    {crate.authors && crate.authors.length > 0 ? crate.authors[0] : 'Unknown Author'}
+                                </span>
+                            </div>
+                            {crate.license && (
+                                <div className="flex items-center gap-1.5">
+                                    <Scale size={12} className="text-[var(--purple-neon)]" />
+                                    <span className="truncate max-w-[80px] text-[var(--text-secondary)]">
+                                        {crate.license}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <div className="ml-3 flex-shrink-0">
                         <RankBadge score={crate.score} size="sm" />
@@ -93,7 +118,7 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                 </div>
 
                 {/* Stats */}
-                <div className="flex items-center gap-4 mb-4 text-xs">
+                <div className="flex items-center gap-4 mb-4 text-xs relative z-10">
                     <div className="flex items-center gap-1.5 text-[var(--text-secondary)]">
                         <Download size={14} className="text-[var(--green-neon)]" />
                         <span>{crate.downloads}</span>
@@ -105,7 +130,7 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                 </div>
 
                 {/* Progress Bar */}
-                <div className="mt-auto">
+                <div className="mt-auto relative z-10">
                     <div className="flex items-center justify-between mb-1.5">
                         <span className="text-xs text-[var(--text-muted)]">Security Score</span>
                         <span className="text-xs font-mono text-[var(--text-secondary)]">{crate.score}%</span>
