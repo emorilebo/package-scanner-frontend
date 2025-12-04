@@ -11,11 +11,11 @@ export default function About() {
         <main className="relative min-h-screen w-full">
             <Navigation />
 
-            <div className="relative z-10 pb-12 sm:pb-16 md:pb-20 w-full" style={{ paddingTop: 'calc(3.5rem + 60px)' }}>
-                <div className="w-full max-w-4xl mx-auto flex flex-col items-center px-4 sm:px-6 md:px-8 lg:px-10">
+            <div className="relative z-10 pb-12 sm:pb-16 md:pb-20 w-full flex justify-center" style={{ paddingTop: 'calc(3.5rem + 60px)' }}>
+                <div className="w-full max-w-4xl flex flex-col items-center px-4 sm:px-6 md:px-8">
                     {/* Header */}
                     <motion.div
-                        className="text-center mb-8 sm:mb-12 md:mb-16 w-full mt-4 sm:mt-6 md:mt-8"
+                        className="text-center mb-8 sm:mb-12 md:mb-16 w-full mt-4 sm:mt-6 md:mt-8 flex flex-col items-center"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
@@ -23,7 +23,7 @@ export default function About() {
                         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-5 md:mb-6 text-[var(--cyan-neon)] text-glow-cyan">
                             About Rust Audit
                         </h1>
-                        <p className="text-base sm:text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
+                        <p className="text-base sm:text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl">
                             A comprehensive security analysis platform designed to protect the Rust ecosystem.
                         </p>
                     </motion.div>
@@ -31,7 +31,7 @@ export default function About() {
                     {/* How it Works */}
                     <section className="mb-12 sm:mb-16 md:mb-20 w-full mt-4 sm:mt-6 md:mt-8">
                         <motion.h2
-                            className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 flex items-center justify-center gap-2 sm:gap-3 text-[var(--text-primary)]"
+                            className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 flex items-center justify-center gap-2 sm:gap-3 text-[var(--text-primary)] w-full"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.2 }}
@@ -40,7 +40,7 @@ export default function About() {
                             <span>How It Works</span>
                         </motion.h2>
 
-                        <div className="grid gap-4 sm:gap-6 w-full max-w-4xl mx-auto px-2 sm:px-4">
+                        <div className="grid gap-4 sm:gap-6 w-full">
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -126,7 +126,7 @@ export default function About() {
                     {/* Scoring Formula */}
                     <section className="mb-12 sm:mb-16 md:mb-20 w-full mt-4 sm:mt-6 md:mt-8">
                         <motion.h2
-                            className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 flex items-center justify-center gap-2 sm:gap-3 text-[var(--text-primary)]"
+                            className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 flex items-center justify-center gap-2 sm:gap-3 text-[var(--text-primary)] w-full"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.4 }}
@@ -135,7 +135,7 @@ export default function About() {
                             <span>The Scoring Formula</span>
                         </motion.h2>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full max-w-4xl mx-auto px-2 sm:px-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full">
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -205,7 +205,7 @@ export default function About() {
                     {/* Author */}
                     <section className="w-full mt-4 sm:mt-6 md:mt-8">
                         <motion.h2
-                            className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 flex items-center justify-center gap-2 sm:gap-3 text-[var(--text-primary)]"
+                            className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 flex items-center justify-center gap-2 sm:gap-3 text-[var(--text-primary)] w-full"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.9 }}
@@ -218,7 +218,7 @@ export default function About() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 1.0 }}
-                            className="w-full max-w-2xl mx-auto px-2 sm:px-4"
+                            className="w-full max-w-2xl mx-auto"
                         >
                             <CyberCard glowColor="cyan" className="p-6 sm:p-8 text-center">
                                 <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto mb-4 sm:mb-6 rounded-full overflow-hidden border-2 border-[var(--cyan-neon)] shadow-[0_0_20px_var(--cyan-glow)] ring-4 ring-[var(--cyan-neon)]/20 relative">
