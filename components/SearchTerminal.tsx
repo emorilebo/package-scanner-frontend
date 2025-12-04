@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X } from 'lucide-react';
+import { Search, X, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
 interface SearchTerminalProps {
@@ -32,30 +32,65 @@ export default function SearchTerminal({
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
             <div className="relative">
-                {/* Outer glow effect */}
-                <div className={`absolute -inset-1 rounded-3xl blur-xl transition-all duration-500 ${
-                    isFocused 
-                        ? 'bg-gradient-to-r from-[var(--cyan-neon)]/40 via-[var(--pink-neon)]/30 to-[var(--green-neon)]/40 opacity-75' 
-                        : 'bg-[var(--cyan-neon)]/10 opacity-0'
-                }`} />
-                
+                {/* Enhanced animated gradient background glow */}
+                <motion.div
+                    className="absolute -inset-3 rounded-3xl opacity-90"
+                    animate={{
+                        background: [
+                            'linear-gradient(90deg, rgba(0,217,255,0.6) 0%, rgba(255,0,229,0.5) 50%, rgba(0,255,136,0.6) 100%)',
+                            'linear-gradient(90deg, rgba(0,255,136,0.6) 0%, rgba(0,217,255,0.5) 50%, rgba(255,0,229,0.6) 100%)',
+                            'linear-gradient(90deg, rgba(255,0,229,0.6) 0%, rgba(0,255,136,0.5) 50%, rgba(0,217,255,0.6) 100%)',
+                            'linear-gradient(90deg, rgba(0,217,255,0.6) 0%, rgba(255,0,229,0.5) 50%, rgba(0,255,136,0.6) 100%)',
+                        ],
+                    }}
+                    transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "linear",
+                    }}
+                    style={{ filter: 'blur(24px)' }}
+                />
+
+                {/* Enhanced animated border */}
+                <motion.div
+                    className="absolute -inset-[3px] rounded-3xl"
+                    style={{
+                        background: 'linear-gradient(90deg, var(--cyan-neon), var(--pink-neon), var(--green-neon), var(--cyan-neon))',
+                        backgroundSize: '300% 100%',
+                    }}
+                    animate={{
+                        backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                    }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "linear",
+                    }}
+                />
+
+                {/* Main search container - Enhanced */}
                 <div
-                    className={`relative flex items-center gap-5 px-8 py-6 bg-[var(--bg-secondary)]/80 backdrop-blur-2xl border-2 rounded-3xl transition-all duration-300 ${
-                        isFocused 
-                            ? 'border-[var(--cyan-neon)]/80 shadow-2xl shadow-[var(--cyan-neon)]/30 scale-[1.02]' 
-                            : 'border-[var(--text-muted)]/30 hover:border-[var(--cyan-neon)]/40 hover:shadow-lg'
-                    }`}
+                    className={`relative flex items-center gap-5 px-8 py-8 bg-[var(--bg-primary)] rounded-3xl transition-all duration-300 border-2 border-transparent ${isFocused ? 'scale-[1.03] shadow-[0_0_40px_var(--cyan-glow),0_0_80px_var(--pink-glow)]' : 'shadow-[0_0_20px_var(--cyan-glow)]'
+                        }`}
                 >
-                    <div className={`flex-shrink-0 p-2.5 rounded-xl transition-all duration-300 ${
-                        isFocused 
-                            ? 'bg-[var(--cyan-neon)]/20 text-[var(--cyan-neon)]' 
-                            : 'bg-[var(--bg-tertiary)]/50 text-[var(--text-muted)]'
-                    }`}>
-                        <Search
-                            size={24}
-                            strokeWidth={2.5}
-                        />
-                    </div>
+                    {/* Enhanced animated search icon */}
+                    <motion.div
+                        className="flex-shrink-0 p-4 rounded-2xl bg-gradient-to-br from-[var(--cyan-neon)]/30 to-[var(--pink-neon)]/30 text-[var(--cyan-neon)] shadow-[0_0_15px_var(--cyan-glow)]"
+                        animate={isFocused ? {
+                            scale: [1, 1.15, 1],
+                            rotate: [0, 5, -5, 0],
+                        } : {
+                            scale: [1, 1.05, 1],
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    >
+                        <Search size={32} strokeWidth={2.5} />
+                    </motion.div>
+
                     <input
                         type="text"
                         value={query}
@@ -66,8 +101,9 @@ export default function SearchTerminal({
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         placeholder={placeholder}
-                        className="flex-1 bg-transparent border-none outline-none text-[var(--text-primary)] text-xl placeholder:text-[var(--text-muted)] placeholder:font-normal"
+                        className="flex-1 bg-transparent border-none outline-none text-[var(--text-primary)] text-xl md:text-2xl placeholder:text-[var(--text-muted)] placeholder:font-normal font-semibold"
                     />
+
                     <AnimatePresence>
                         {query && (
                             <motion.button
@@ -81,13 +117,29 @@ export default function SearchTerminal({
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.8 }}
                             >
-                                <X size={20} strokeWidth={2.5} />
+                                <X size={24} strokeWidth={2.5} />
                             </motion.button>
                         )}
                     </AnimatePresence>
+
+                    {/* Sparkle indicator */}
+                    <motion.div
+                        className="flex-shrink-0 text-[var(--pink-neon)]"
+                        animate={{
+                            opacity: [0.5, 1, 0.5],
+                            scale: [0.9, 1.1, 0.9],
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    >
+                        <Sparkles size={24} />
+                    </motion.div>
                 </div>
             </div>
-            
+
             {/* Helper text */}
             <motion.p
                 className="text-center mt-6 text-sm text-[var(--text-muted)]"
@@ -95,7 +147,7 @@ export default function SearchTerminal({
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
             >
-                Press <kbd className="px-2.5 py-1.5 bg-[var(--bg-tertiary)] border border-[var(--text-muted)]/30 rounded-md text-xs font-mono">Enter</kbd> to search or start typing to filter results
+                Press <kbd className="px-2.5 py-1.5 bg-[var(--bg-tertiary)] border border-[var(--cyan-neon)]/30 rounded-md text-xs font-mono text-[var(--cyan-neon)]">Enter</kbd> to search or start typing to filter results
             </motion.p>
         </motion.form>
     );

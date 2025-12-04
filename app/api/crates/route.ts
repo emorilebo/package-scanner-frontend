@@ -46,7 +46,6 @@ interface CrateDetailResponse {
     updated_at: string;
     categories: string[];
     keywords: string[];
-    keywords: string[];
     authors: string[];
     license: string | null;
   };
@@ -213,7 +212,6 @@ export async function GET(request: NextRequest) {
               low: 0,
             },
             features: [],
-            versionCount: 0,
             versionCount: 0,
             authors: [],
             license: 'Unknown',

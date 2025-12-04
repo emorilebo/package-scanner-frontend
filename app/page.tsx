@@ -9,7 +9,9 @@ import RankBadge from '@/components/RankBadge';
 import CrateCard, { CrateData } from '@/components/CrateCard';
 import PackageModal from '@/components/PackageModal';
 import Navigation from '@/components/Navigation';
-import { useState, useEffect } from 'react';
+import HeroCarousel from '@/components/HeroCarousel';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 
 const features = [
@@ -115,23 +117,48 @@ export default function Home() {
     setSelectedPackage(pkg);
   };
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     if (!loading && hasMore) {
       const nextPage = page + 1;
       setPage(nextPage);
       fetchCrates(searchQuery, nextPage);
     }
-  };
+  }, [loading, hasMore, page, searchQuery]);
+
+  // Infinite scroll observer
+  const observerTarget = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [loadMore]);
 
   const filteredCrates = crates;
 
   return (
-    <div className="relative min-h-screen">
+    <main className="relative min-h-screen w-full">
       {/* Navigation */}
       <Navigation />
 
-      {/* Hero Section */}
-      <section className="relative z-10 pt-32 pb-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Hero Section - Proper spacing for fixed navbar (h-16 = 64px) + extra padding */}
+      <section className="relative z-10 pb-28 overflow-hidden" style={{ paddingTop: 'calc(4rem + 80px)' }}>
         {/* Background gradient overlay */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-[var(--cyan-neon)]/8 rounded-full blur-3xl" />
@@ -139,7 +166,7 @@ export default function Home() {
           <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-[var(--green-neon)]/6 rounded-full blur-3xl" />
         </div>
 
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="container mx-auto max-w-6xl flex flex-col items-center text-center px-4 sm:px-6 lg:px-8 w-full">
           {/* Badge */}
           <motion.div
             className="mb-8"
@@ -152,41 +179,52 @@ export default function Home() {
             </span>
           </motion.div>
 
-          {/* Main Title - Redesigned */}
+          {/* Main Title - Single Line with Animation */}
           <motion.div
-            className="mb-10"
+            className="mb-10 w-full flex flex-col items-center justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h1 className="relative inline-block">
-              <span className="block text-5xl sm:text-6xl md:text-7xl font-black leading-tight mb-2">
-                <span className="bg-gradient-to-r from-[var(--cyan-neon)] via-[var(--cyan-neon)] to-[var(--pink-neon)] bg-clip-text text-transparent text-glow-cyan">
-                  RUST
-                </span>
-              </span>
-              <span className="block text-5xl sm:text-6xl md:text-7xl font-black leading-tight mb-2">
-                <span className="bg-gradient-to-r from-[var(--pink-neon)] via-[var(--pink-neon)] to-[var(--green-neon)] bg-clip-text text-transparent text-glow-pink">
-                  SECURITY
-                </span>
-              </span>
-              <span className="block text-5xl sm:text-6xl md:text-7xl font-black leading-tight">
-                <span className="bg-gradient-to-r from-[var(--green-neon)] via-[var(--green-neon)] to-[var(--cyan-neon)] bg-clip-text text-transparent text-glow-green">
-                  SCANNER
-                </span>
-              </span>
+            <div className="relative px-4 sm:px-6 md:px-8 py-4 w-full">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-center">
+                <motion.span
+                  className="inline-block bg-gradient-to-r from-[var(--cyan-neon)] via-[var(--pink-neon)] to-[var(--green-neon)] bg-clip-text text-transparent"
+                  animate={{
+                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  style={{
+                    backgroundSize: '200% 200%',
+                  }}
+                >
+                  RUST SECURITY SCANNER
+                </motion.span>
+              </h1>
 
-              {/* Decorative underline */}
+              {/* Animated underline instead of scanning through text */}
               <motion.div
-                className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-[var(--cyan-neon)] to-transparent rounded-full"
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 128, opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
+                className="absolute bottom-0 left-1/2 h-1 bg-gradient-to-r from-[var(--cyan-neon)] via-[var(--pink-neon)] to-[var(--green-neon)] rounded-full"
+                initial={{ width: 0, x: '-50%' }}
+                animate={{
+                  width: ['0%', '100%', '0%'],
+                  x: '-50%'
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                style={{ boxShadow: '0 0 15px var(--cyan-neon)' }}
               />
-            </h1>
+            </div>
 
             <motion.p
-              className="text-2xl sm:text-3xl md:text-4xl text-[var(--text-primary)] font-light max-w-3xl mx-auto leading-relaxed mt-12 mb-6"
+              className="text-lg sm:text-xl md:text-2xl text-[var(--text-primary)] font-light max-w-3xl leading-relaxed mt-8 mb-4 text-center px-4 mx-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.8 }}
@@ -195,7 +233,7 @@ export default function Home() {
             </motion.p>
 
             <motion.p
-              className="text-base sm:text-lg text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed"
+              className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl leading-relaxed text-center px-4 mx-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
@@ -206,7 +244,7 @@ export default function Home() {
 
           {/* Search Bar - More Prominent */}
           <motion.div
-            className="mb-20"
+            className="w-full max-w-3xl mb-16 mt-8"
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: 0.6, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -217,9 +255,19 @@ export default function Home() {
             />
           </motion.div>
 
+          {/* Hero Carousel */}
+          <motion.div
+            className="w-full max-w-5xl mt-8"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.75, duration: 0.7 }}
+          >
+            <HeroCarousel />
+          </motion.div>
+
           {/* Quick Stats */}
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-20"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-20 mt-8 w-full px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
@@ -243,7 +291,7 @@ export default function Home() {
           </motion.div>
 
           {/* Features Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto justify-items-center">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 px-4">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -277,8 +325,8 @@ export default function Home() {
       </section>
 
       {/* Top Ranked Crates */}
-      <section className="relative z-10 py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative z-10 py-16 w-full">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <motion.div
             className="text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
@@ -329,7 +377,7 @@ export default function Home() {
             </motion.div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full mt-8">
                 {filteredCrates.map((crate, index) => (
                   <CrateCard
                     key={`${crate.name}-${index}`}
@@ -339,16 +387,23 @@ export default function Home() {
                   />
                 ))}
               </div>
-              {hasMore && (
-                <div className="flex justify-center mt-12">
-                  <button
-                    onClick={loadMore}
-                    disabled={loading}
-                    className="px-8 py-3 cyber-border text-[var(--cyan-neon)] hover:border-[var(--cyan-neon)]/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {loading ? 'Loading...' : 'Load More'}
-                  </button>
-                </div>
+              {/* Infinite Scroll Observer */}
+              <div ref={observerTarget} className="mt-12">
+                {loading && <LoadingSpinner />}
+              </div>
+
+              {!hasMore && filteredCrates.length > 0 && (
+                <motion.div
+                  className="text-center mt-12 py-8"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  <div className="inline-block px-6 py-3 rounded-full bg-[var(--bg-secondary)] border border-[var(--cyan-neon)]/30">
+                    <span className="text-[var(--text-secondary)] text-sm">
+                      🎯 You've reached the end
+                    </span>
+                  </div>
+                </motion.div>
               )}
             </>
           )}
@@ -383,6 +438,30 @@ export default function Home() {
             }}
           />
         ))}
+
+        {/* Data Stream Effects */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`stream-${i}`}
+            className="absolute w-px"
+            style={{
+              height: '100px',
+              background: `linear-gradient(to bottom, transparent, ${i % 2 === 0 ? 'var(--cyan-neon)' : 'var(--pink-neon)'}, transparent)`,
+              left: `${10 + i * 12}%`,
+              opacity: 0,
+            }}
+            animate={{
+              y: ['-100px', '100vh'],
+              opacity: [0, 0.3, 0.5, 0.3, 0],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 2,
+              repeat: Infinity,
+              delay: i * 0.5,
+              ease: "linear",
+            }}
+          />
+        ))}
       </div>
 
       {/* Package Detail Modal */}
@@ -390,6 +469,6 @@ export default function Home() {
         packageData={selectedPackage}
         onClose={() => setSelectedPackage(null)}
       />
-    </div>
+    </main>
   );
 }

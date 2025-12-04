@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -45,8 +45,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: var(--font-space-grotesk), 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-display: var(--font-rajdhani), 'Rajdhani', sans-serif;
 }
 
 * {
@@ -65,16 +66,51 @@ body {
   font-family: var(--font-sans);
   overflow-x: hidden;
   position: relative;
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-#__next {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+/* Ensure proper container centering */
+#__next,
+html {
   width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Utility class for centered containers */
+.container-centered {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Ensure containers are properly centered */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
 /* Animated Grid Background */
@@ -340,4 +376,199 @@ body::after {
 ::selection {
   background: var(--cyan-glow);
   color: var(--text-primary);
+}
+
+/* Data Stream Animation */
+@keyframes data-stream {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.data-stream {
+  position: fixed;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, var(--cyan-neon), transparent);
+  animation: data-stream 3s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Security Grid Overlay */
+@keyframes security-grid {
+
+  0%,
+  100% {
+    opacity: 0.05;
+  }
+
+  50% {
+    opacity: 0.15;
+  }
+}
+
+.security-grid {
+  background-image:
+    repeating-linear-gradient(0deg, var(--cyan-neon) 0px, transparent 1px, transparent 20px),
+    repeating-linear-gradient(90deg, var(--cyan-neon) 0px, transparent 1px, transparent 20px);
+  animation: security-grid 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Threat Pulse Animation */
+@keyframes threat-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+.threat-pulse {
+  animation: threat-pulse 2s ease-in-out infinite;
+}
+
+/* Typing Indicator */
+@keyframes typing-dot {
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-10px);
+  }
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan-neon);
+  margin: 0 2px;
+  animation: typing-dot 1.4s ease-in-out infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Scanning Border Effect */
+@keyframes scanning-border {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 200% 200%;
+  }
+}
+
+.scanning-border {
+  position: relative;
+  background: linear-gradient(90deg,
+      var(--cyan-neon) 0%,
+      var(--pink-neon) 25%,
+      var(--green-neon) 50%,
+      var(--pink-neon) 75%,
+      var(--cyan-neon) 100%);
+  background-size: 200% 200%;
+  animation: scanning-border 3s linear infinite;
+}
+
+/* Enhanced Radar Sweep */
+@keyframes enhanced-radar {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+
+.enhanced-radar {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg,
+      transparent 0deg,
+      transparent 270deg,
+      rgba(0, 217, 255, 0.15) 340deg,
+      rgba(0, 217, 255, 0.3) 350deg,
+      rgba(0, 217, 255, 0.1) 360deg);
+  animation: enhanced-radar 6s linear infinite;
+  pointer-events: none;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* Futuristic Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
 }

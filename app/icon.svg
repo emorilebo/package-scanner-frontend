@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield background -->
+  <path d="M16 2L4 7V16C4 22.5 8.5 28.5 16 30C23.5 28.5 28 22.5 28 16V7L16 2Z" fill="#00D9FF" opacity="0.9"/>
+  <!-- Inner shield -->
+  <path d="M16 4L6 8V16C6 21.5 9.5 26.5 16 28C22.5 26.5 26 21.5 26 16V8L16 4Z" fill="#0A0E1A"/>
+  <!-- Security scan lines -->
+  <path d="M10 12L14 16L10 20" stroke="#00D9FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M22 12L18 16L22 20" stroke="#00D9FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Center dot -->
+  <circle cx="16" cy="16" r="2" fill="#00D9FF"/>
+  <!-- Glow effect -->
+  <circle cx="16" cy="16" r="12" fill="#00D9FF" opacity="0.1"/>
+</svg>
+

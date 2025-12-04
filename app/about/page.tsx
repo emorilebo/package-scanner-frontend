@@ -7,14 +7,14 @@ import { Shield, Activity, Users, GitBranch, Terminal, Cpu, User } from 'lucide-
 
 export default function About() {
     return (
-        <div className="relative min-h-screen">
+        <main className="relative min-h-screen w-full">
             <Navigation />
 
-            <main className="relative z-10 pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-4xl mx-auto">
+            <div className="relative z-10 pb-20 w-full" style={{ paddingTop: 'calc(4rem + 80px)' }}>
+                <div className="w-full max-w-5xl mx-auto flex flex-col items-center px-4 sm:px-6 lg:px-8">
                     {/* Header */}
                     <motion.div
-                        className="text-center mb-16"
+                        className="text-center mb-16 w-full mt-8"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
@@ -28,9 +28,9 @@ export default function About() {
                     </motion.div>
 
                     {/* How it Works */}
-                    <section className="mb-20">
+                    <section className="mb-20 w-full mt-8">
                         <motion.h2
-                            className="text-2xl font-bold mb-8 flex items-center gap-3 text-[var(--text-primary)]"
+                            className="text-2xl font-bold mb-8 flex items-center justify-center gap-3 text-[var(--text-primary)]"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.2 }}
@@ -39,7 +39,7 @@ export default function About() {
                             How It Operates
                         </motion.h2>
 
-                        <div className="grid gap-6">
+                        <div className="grid gap-6 w-full">
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -73,9 +73,9 @@ export default function About() {
                     </section>
 
                     {/* Scoring Formula */}
-                    <section className="mb-20">
+                    <section className="mb-20 w-full mt-8">
                         <motion.h2
-                            className="text-2xl font-bold mb-8 flex items-center gap-3 text-[var(--text-primary)]"
+                            className="text-2xl font-bold mb-8 flex items-center justify-center gap-3 text-[var(--text-primary)]"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.4 }}
@@ -84,7 +84,7 @@ export default function About() {
                             The Scoring Formula
                         </motion.h2>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -152,9 +152,9 @@ export default function About() {
                     </section>
 
                     {/* Author */}
-                    <section>
+                    <section className="w-full mt-8">
                         <motion.h2
-                            className="text-2xl font-bold mb-8 flex items-center gap-3 text-[var(--text-primary)]"
+                            className="text-2xl font-bold mb-8 flex items-center justify-center gap-3 text-[var(--text-primary)]"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.9 }}
@@ -167,27 +167,36 @@ export default function About() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 1.0 }}
+                            className="max-w-xl mx-auto"
                         >
                             <CyberCard className="p-8 text-center">
                                 <div className="w-24 h-24 mx-auto bg-[var(--bg-tertiary)] rounded-full flex items-center justify-center mb-6 border-2 border-[var(--cyan-neon)] shadow-[0_0_20px_var(--cyan-glow)]">
                                     <User size={48} className="text-[var(--cyan-neon)]" />
                                 </div>
-                                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Emmanuel Ori</h3>
-                                <p className="text-[var(--cyan-neon)] font-mono mb-6">@emorilebo</p>
-                                <p className="text-[var(--text-secondary)] max-w-lg mx-auto leading-relaxed">
-                                    Passionate about Rust security and building tools that empower developers to ship safer code. This project aims to bring transparency to the Rust dependency ecosystem.
+                                <h3 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Godfrey Lebo</h3>
+                                <p className="text-[var(--cyan-neon)] font-mono mb-4">Fullstack Developer & Technical PM</p>
+                                <p className="text-[var(--text-secondary)] max-w-lg mx-auto leading-relaxed mb-4">
+                                    Specializing in AI, Mobile & Backend Security with 9+ years of experience building secure applications. Passionate about Rust security and creating tools that empower developers to ship safer code.
                                 </p>
+                                <a
+                                    href="https://godfreylebo.dev"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--cyan-neon)]/10 border border-[var(--cyan-neon)]/40 rounded-full text-[var(--cyan-neon)] hover:bg-[var(--cyan-neon)]/20 transition-all"
+                                >
+                                    Visit godfreylebo.dev
+                                </a>
                             </CyberCard>
                         </motion.div>
                     </section>
                 </div>
-            </main>
+            </div>
 
             {/* Background Elements */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--cyan-neon)]/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[var(--pink-neon)]/5 rounded-full blur-3xl" />
             </div>
-        </div>
+        </main>
     );
 }

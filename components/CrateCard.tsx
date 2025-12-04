@@ -54,11 +54,13 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
             className="cursor-pointer h-full w-full max-w-full group"
             onClick={() => onClick(crate)}
         >
-            <CyberCard className="h-full flex flex-col w-full overflow-hidden relative">
+            <CyberCard className="h-full flex flex-col w-full overflow-hidden relative group">
                 {/* Scanner Overlay */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div className="scanner-line"></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--cyan-neon)]/5 to-transparent translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-1000 ease-in-out"></div>
+                    {/* Security grid overlay on hover */}
+                    <div className="absolute inset-0 security-grid opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </div>
 
                 {/* Header */}
@@ -76,9 +78,9 @@ export default function CrateCard({ crate, onClick, index = 0 }: CrateCardProps)
                             {crate.status && crate.statusEmoji && (
                                 <span
                                     className={`text-xs px-2.5 py-1 rounded-md font-medium ${crate.statusColor === 'green' ? 'bg-[var(--green-neon)]/20 border border-[var(--green-neon)]/40 text-[var(--green-neon)]' :
-                                            crate.statusColor === 'yellow' ? 'bg-[var(--warning)]/20 border border-[var(--warning)]/40 text-[var(--warning)]' :
-                                                crate.statusColor === 'orange' ? 'bg-[var(--warning)]/20 border border-[var(--warning)]/40 text-[var(--warning)]' :
-                                                    'bg-[var(--danger)]/20 border border-[var(--danger)]/40 text-[var(--danger)]'
+                                        crate.statusColor === 'yellow' ? 'bg-[var(--warning)]/20 border border-[var(--warning)]/40 text-[var(--warning)]' :
+                                            crate.statusColor === 'orange' ? 'bg-[var(--warning)]/20 border border-[var(--warning)]/40 text-[var(--warning)]' :
+                                                'bg-[var(--danger)]/20 border border-[var(--danger)]/40 text-[var(--danger)]'
                                         }`}
                                 >
                                     {crate.statusEmoji} {crate.status}
