@@ -370,54 +370,49 @@ export default function Home() {
           >
             <button
               onClick={() => setScoreFilter('all')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
-                scoreFilter === 'all'
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all ${scoreFilter === 'all'
                   ? 'bg-[var(--cyan-neon)]/20 border-2 border-[var(--cyan-neon)] text-[var(--cyan-neon)] shadow-[0_0_15px_var(--cyan-glow)]'
                   : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--cyan-neon)]/50 hover:text-[var(--cyan-neon)]'
-              }`}
+                }`}
             >
               All
             </button>
             <button
               onClick={() => setScoreFilter('healthy')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${
-                scoreFilter === 'healthy'
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${scoreFilter === 'healthy'
                   ? 'bg-[var(--green-neon)]/20 border-2 border-[var(--green-neon)] text-[var(--green-neon)] shadow-[0_0_15px_var(--green-glow)]'
                   : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--green-neon)]/50 hover:text-[var(--green-neon)]'
-              }`}
+                }`}
             >
               <span>🟢</span>
               <span>Healthy (80-100)</span>
             </button>
             <button
               onClick={() => setScoreFilter('warning')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${
-                scoreFilter === 'warning'
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${scoreFilter === 'warning'
                   ? 'bg-[var(--warning)]/20 border-2 border-[var(--warning)] text-[var(--warning)] shadow-[0_0_15px_var(--warning-glow)]'
                   : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--warning)]/50 hover:text-[var(--warning)]'
-              }`}
+                }`}
             >
               <span>🟡</span>
               <span>Warning (60-79)</span>
             </button>
             <button
               onClick={() => setScoreFilter('stale')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${
-                scoreFilter === 'stale'
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${scoreFilter === 'stale'
                   ? 'bg-[var(--warning)]/20 border-2 border-[var(--warning)] text-[var(--warning)] shadow-[0_0_15px_var(--warning-glow)]'
                   : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--warning)]/50 hover:text-[var(--warning)]'
-              }`}
+                }`}
             >
               <span>🟠</span>
               <span>Stale (40-59)</span>
             </button>
             <button
               onClick={() => setScoreFilter('risky')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${
-                scoreFilter === 'risky'
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center gap-1.5 sm:gap-2 ${scoreFilter === 'risky'
                   ? 'bg-[var(--danger)]/20 border-2 border-[var(--danger)] text-[var(--danger)] shadow-[0_0_15px_var(--danger-glow)]'
                   : 'bg-[var(--bg-secondary)] border border-[var(--text-muted)]/30 text-[var(--text-secondary)] hover:border-[var(--danger)]/50 hover:text-[var(--danger)]'
-              }`}
+                }`}
             >
               <span>🔴</span>
               <span>Risky (0-39)</span>
