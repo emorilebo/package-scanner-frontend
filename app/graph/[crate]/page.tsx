@@ -5,23 +5,57 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Share2, Download } from 'lucide-react';
 import DependencyGraph from '@/components/DependencyGraph';
-import { generateMockGraph, GraphData } from '@/lib/mockGraphData';
+import { GraphData } from '@/lib/mockGraphData';
 
 export default function GraphPage() {
     const params = useParams();
     const router = useRouter();
     const crateName = params.crate as string;
     const [graphData, setGraphData] = useState<GraphData | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (crateName) {
-            // In a real app, we would fetch data here
-            const data = generateMockGraph(decodeURIComponent(crateName));
-            setGraphData(data);
+            const fetchData = async () => {
+                try {
+                    setLoading(true);
+                    const res = await fetch(`/api/graph?crate=${encodeURIComponent(crateName)}`);
+                    if (!res.ok) throw new Error('Failed to fetch graph data');
+                    const data = await res.json();
+                    setGraphData(data);
+                } catch (err) {
+                    console.error(err);
+                    setError('Failed to load dependency graph. Please try again.');
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchData();
         }
     }, [crateName]);
 
-    if (!graphData) return null;
+    if (loading) {
+        return (
+            <div className="h-screen w-full bg-black flex items-center justify-center text-[var(--cyan-neon)] font-mono">
+                LOADING NEURAL NET...
+            </div>
+        );
+    }
+
+    if (error || !graphData) {
+        return (
+            <div className="h-screen w-full bg-black flex flex-col items-center justify-center text-[var(--danger)] font-mono gap-4">
+                <div>{error || 'Crate not found'}</div>
+                <button
+                    onClick={() => router.back()}
+                    className="px-4 py-2 border border-[var(--cyan-neon)] text-[var(--cyan-neon)] rounded hover:bg-[var(--cyan-neon)]/10"
+                >
+                    RETURN
+                </button>
+            </div>
+        );
+    }
 
     return (
         <main className="min-h-screen bg-black text-white relative overflow-hidden flex flex-col">
