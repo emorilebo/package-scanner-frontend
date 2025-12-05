@@ -24,9 +24,9 @@ export default function Navigation() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        <Shield 
-                            className="text-[var(--cyan-neon)] transition-all group-hover:text-glow-cyan flex-shrink-0" 
-                            size={24} 
+                        <Shield
+                            className="text-[var(--cyan-neon)] transition-all group-hover:text-glow-cyan flex-shrink-0"
+                            size={24}
                             strokeWidth={2.5}
                         />
                         <GlitchText className="text-sm sm:text-base md:text-lg lg:text-xl font-bold font-mono text-[var(--cyan-neon)]">
@@ -41,6 +41,12 @@ export default function Navigation() {
                             className="px-3 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] transition-colors rounded-lg hover:bg-[var(--bg-secondary)]"
                         >
                             About
+                        </a>
+                        <a
+                            href="/dashboard"
+                            className="px-3 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] transition-colors rounded-lg hover:bg-[var(--bg-secondary)]"
+                        >
+                            Dashboard
                         </a>
                         <a
                             href="https://github.com/emorilebo/rust_secure_dependency_audit"
@@ -76,6 +82,13 @@ export default function Navigation() {
                             onClick={() => setIsMenuOpen(false)}
                         >
                             About
+                        </a>
+                        <a
+                            href="/dashboard"
+                            className="block px-4 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--cyan-neon)] hover:bg-[var(--bg-secondary)] transition-colors rounded-lg"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Dashboard
                         </a>
                         <a
                             href="https://github.com/emorilebo/rust_secure_dependency_audit"
