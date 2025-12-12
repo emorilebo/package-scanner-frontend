@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
+import PlatformSidebar from "@/components/PlatformSidebar";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -37,10 +39,13 @@ export default function RootLayout({
         <meta name="theme-color" content="#0A0E1A" />
       </head>
       <body
-        className={`${rajdhani.variable} ${spaceGrotesk.variable} antialiased`}
+        className={`${rajdhani.variable} ${spaceGrotesk.variable} antialiased bg-[var(--bg-primary)] text-[var(--text-primary)]`}
       >
-        <div id="root" className="min-h-screen w-full">
-          {children}
+        <div id="root" className="min-h-screen w-full flex">
+          <PlatformSidebar />
+          <div className="flex-1 w-full md:pl-20 transition-all duration-300">
+            {children}
+          </div>
         </div>
       </body>
     </html>

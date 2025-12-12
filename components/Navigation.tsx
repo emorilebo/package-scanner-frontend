@@ -10,7 +10,7 @@ export default function Navigation() {
 
     return (
         <motion.nav
-            className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--cyan-neon)]/10 bg-[var(--bg-primary)]/80 backdrop-blur-xl"
+            className="fixed top-0 left-0 md:left-20 right-0 z-40 border-b border-[var(--cyan-neon)]/10 bg-[var(--bg-primary)]/80 backdrop-blur-xl transition-all duration-300"
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
