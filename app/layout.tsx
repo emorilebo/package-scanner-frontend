@@ -17,7 +17,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Package Sentinel | Universal Dependency Security",
+  title: "Package Integrity Scanner | Universal Dependency Security",
   description: "Real-time security rankings for Rust, NPM, Python, and more. Search, analyze, and verify dependencies with comprehensive security audits.",
   keywords: ["rust", "crates", "npm", "pypi", "security", "dependency audit", "cargo", "vulnerability scanner", "supply chain"],
   icons: {
@@ -43,7 +43,7 @@ export default function RootLayout({
       >
         <div id="root" className="min-h-screen w-full flex">
           <PlatformSidebar />
-          <div className="flex-1 w-full md:pl-20 transition-all duration-300">
+          <div className="flex-1 w-full md:pl-[72px] pb-24 md:pb-0 transition-all duration-300">
             {children}
           </div>
         </div>

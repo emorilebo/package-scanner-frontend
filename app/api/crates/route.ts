@@ -175,7 +175,7 @@ export async function GET(request: NextRequest) {
           // Collect unique authors from recent versions (latest 5 versions)
           const authorMap = new Map<number, string>();
           const versionsToCheck = detailData.versions.slice(0, 5);
-          
+
           for (const version of versionsToCheck) {
             if (version.published_by) {
               const author = version.published_by;
@@ -189,7 +189,7 @@ export async function GET(request: NextRequest) {
               }
             }
           }
-          
+
           const authors = Array.from(authorMap.values());
 
           return {
@@ -257,6 +257,9 @@ export async function GET(request: NextRequest) {
     const successfulCrates = cratesWithScores
       .filter((result): result is PromiseFulfilledResult<any> => result.status === 'fulfilled')
       .map(result => result.value);
+
+    // Sort by score ascending (worst health first)
+    successfulCrates.sort((a, b) => a.score - b.score);
 
     return NextResponse.json({
       crates: successfulCrates,

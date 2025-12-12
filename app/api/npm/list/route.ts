@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
 
         const data: NpmSearchResult = await response.json();
 
-        const packages = data.objects.map(obj => {
+        const packagesWithScores = data.objects.map(obj => {
             const pkg = obj.package;
             const score = calculateHealthScore(pkg, obj.score);
             const status = getHealthStatus(score);
@@ -112,12 +112,15 @@ export async function GET(request: NextRequest) {
             };
         });
 
+        // Sort by score ascending (worst health first)
+        const sortedPackages = packagesWithScores.sort((a, b) => a.score - b.score);
+
         return NextResponse.json({
-            packages,
+            packages: sortedPackages,
             meta: {
                 total: data.total,
                 page,
-                perPage,
+                per_page: perPage,
                 totalPages: Math.ceil(data.total / perPage)
             }
         });
