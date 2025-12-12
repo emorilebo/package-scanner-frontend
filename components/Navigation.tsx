@@ -30,7 +30,7 @@ export default function Navigation() {
                             strokeWidth={2.5}
                         />
                         <GlitchText className="text-sm sm:text-base md:text-lg lg:text-xl font-bold font-mono text-[var(--cyan-neon)]">
-                            RUST_AUDIT
+                            PKG_SENTINEL
                         </GlitchText>
                     </motion.a>
 

@@ -17,9 +17,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Rust Crate Security Scanner | Dependency Audit",
-  description: "Real-time security rankings for Rust crates. Search, analyze, and verify dependencies with comprehensive security audits.",
-  keywords: ["rust", "crates", "security", "dependency audit", "cargo", "vulnerability scanner"],
+  title: "Package Sentinel | Universal Dependency Security",
+  description: "Real-time security rankings for Rust, NPM, Python, and more. Search, analyze, and verify dependencies with comprehensive security audits.",
+  keywords: ["rust", "crates", "npm", "pypi", "security", "dependency audit", "cargo", "vulnerability scanner", "supply chain"],
   icons: {
     icon: '/icon.svg',
   },
